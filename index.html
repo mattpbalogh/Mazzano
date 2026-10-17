@@ -215,7 +215,7 @@
 
 <div class="map" id="map">
   <!-- Your base map. Put the file in the same folder as this HTML file. -->
-  <img class="base" id="baseImage" src="Map_around_Mazzano.png" alt="Map">
+  <img class="base" id="baseImage" src="Map_around_mazzano.png" alt="Map">
 </div>
 
 <div id="readout"></div>
@@ -250,7 +250,7 @@ const LAYER_SCALE = 1.30;
   PLACES - approximate positions of every name on your map
   ============================================================
   Format:  "Name": [x, y]   (percent across, percent down)
-  These are the CENTRE OF EACH LABEL on Map_around_Mazzano.png,
+  These are the CENTRE OF EACH LABEL on Map_around_mazzano.png,
   worked out by eye, so expect to nudge some by a point or two.
   Use them in a location with   place: "Nepi"   instead of x / y.
 */
@@ -357,7 +357,7 @@ const locations = [
     x: 65.2, y: 49,
     title: "Mazzano Romano",
     layer: {
-      image: "Mazzano Map.jpg",
+      image: "Mazzano map.jpg",
       locations: loadList("mazzanoLocations", "Mazzano.js")
     }
   }
