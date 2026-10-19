@@ -13,18 +13,14 @@
     background: #f4f1ea;
   }
 
-  /* The hint line above the map */
-  .hint {
-    max-width: 1000px;
-    margin: 0 auto 10px;
-    text-align: center;
-    font-size: 15px;
-    color: #5a5648;
+  /* On a phone, use more of the screen for the map */
+  @media (max-width: 700px) {
+    body { padding: 6px; }
   }
 
   /* Warning shown if a locations file is missing or has a typo */
   .problem {
-    max-width: 1000px;
+    max-width: 1050px;
     margin: 0 auto 10px;
     padding: 8px 12px;
     background: #fde8e8;
@@ -35,9 +31,10 @@
   }
 
   /* The map container: everything is positioned relative to this */
+  /* MAP SIZE: max-width is how wide the map can get on a big screen (was 1000px; 1050px = 5% larger) */
   .map {
     position: relative;
-    max-width: 1000px;
+    max-width: 1050px;
     margin: 0 auto;
   }
   .map > img.base {
@@ -52,7 +49,7 @@
     /* Icon size: shrinks and grows WITH the map, so each icon always covers the
        same part of the picture. The three numbers are: smallest, % of the map's
        width, largest. Edit them to resize all icons. */
-    width: clamp(26px, 4.4%, 44px);
+    width: clamp(26px, 4.4%, 46px);
     aspect-ratio: 1 / 1;
     transform: translate(-50%, -50%);
     cursor: pointer;
@@ -60,6 +57,40 @@
   }
   .icon:hover { transform: translate(-50%, -50%) scale(1.12); }
   .icon img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+  /* Title block on the base map ("Around Mazzano Romano" + three links + hint).
+     Its position and wording are set in Title_block.js. All the text sizes scale with
+     the map; the first number in each clamp() is the smallest size (phones), the
+     last is the largest. Edit them to make a line bigger or smaller. */
+  .titlezone {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;          /* clicks pass through to the map, except on the links */
+    container-type: inline-size;   /* lets the text sizes follow the map's width (cqw units) */
+    z-index: 10;
+  }
+  .titleblock {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    white-space: nowrap;
+    color: #2b2b1b;
+    font-family: "Trebuchet MS", "Segoe UI", Arial, sans-serif;
+    /* white outline so the words stay readable over the map */
+    text-shadow: 0 0 3px #fff, 0 0 3px #fff, 0 0 5px #fff, 1px 1px 2px #fff, -1px -1px 2px #fff, 1px -1px 2px #fff, -1px 1px 2px #fff;
+  }
+  .tb-title { font-weight: 700; font-size: clamp(14px, 3.6cqw, 38px); line-height: 1.2; }
+  .tb-links { font-size: clamp(11px, 2.3cqw, 25px); line-height: 1.5; margin-top: 1px; }
+  .tb-links a {
+    color: #1a5fb4;
+    text-decoration: underline;
+    font-weight: 600;
+    margin: 0 0.45em;
+    cursor: pointer;
+    pointer-events: auto;          /* the links themselves can be clicked */
+  }
+  .tb-links a:hover { color: #0b3d80; }
+  .tb-hint { font-size: clamp(10px, 1.6cqw, 17px); line-height: 1.4; color: #4a4a3c; }
 
   /* Popup box: outer box stays put, inner part scrolls if text is long */
   .popup {
@@ -210,8 +241,6 @@
 </head>
 <body>
 
-<!-- Hint line above the map: edit the wording here -->
-<div class="hint">Click on an icon to find out more</div>
 
 <div class="map" id="map">
   <!-- Your base map. Put the file in the same folder as this HTML file. -->
@@ -223,6 +252,7 @@
 <!-- The location blocks live in these two files, in the same folder as this one -->
 <script src="Mazzano_area.js"></script>
 <script src="Mazzano.js"></script>
+<script src="Title_block.js"></script>
 
 <script>
 /*
@@ -243,14 +273,14 @@ const SHOW_GUIDES = false;
                 1.10 = 10% bigger than the base map, so it overhangs both sides
                 (it is never allowed to be wider than the browser window).
 */
-const LAYER_SCALE = 1.30;
+const LAYER_SCALE = 1.10;
 
 /*
   ============================================================
   PLACES - approximate positions of every name on your map
   ============================================================
   Format:  "Name": [x, y]   (percent across, percent down)
-  These are the CENTRE OF EACH LABEL on Map_around_mazzano.png,
+  These are the CENTRE OF EACH LABEL on Map_around_Mazzano.png,
   worked out by eye, so expect to nudge some by a point or two.
   Use them in a location with   place: "Nepi"   instead of x / y.
 */
@@ -439,8 +469,10 @@ function showPopup(loc, iconEl, container) {
     const pw = popup.offsetWidth;
     const ph = popup.offsetHeight;
     let left = (loc.x / 100) * cw + (loc.x > 60 ? -(pw + 30) : 30);
+    if (loc.centre) left = (loc.x / 100) * cw - pw / 2;   // title-block popups: centred under the block
     left = Math.max(0, Math.min(left, cw - pw));
     let top = (loc.y / 100) * ch + (loc.y > 55 ? -(ph - 20) : -20);
+    if (loc.centre) top = (loc.y / 100) * ch;
     // keep within the visible part of the window (convert window edges to map coordinates)
     const rect = container.getBoundingClientRect();
     const minTop = -rect.top + margin;
@@ -598,7 +630,63 @@ document.addEventListener("keydown", function (e) {
   if (openPopup) { closePopup(); } else { closeLayer(); }
 });
 
+// The title block: "Around Mazzano Romano", three links that open popups, and a hint line.
+// Everything about it (position, wording, popup contents) is in Title_block.js
+function buildTitleBlock() {
+  let cfg = null;
+  try { cfg = (typeof titleBlock !== "undefined") ? titleBlock : null; } catch (err) {}
+  if (!cfg || typeof cfg !== "object") {
+    const note = document.createElement("div");
+    note.className = "problem";
+    note.textContent = "Title_block.js did not load, or has a typing error in it, so the title block is missing. " +
+                       "Press F12 and look at the Console for the line number.";
+    document.body.insertBefore(note, document.getElementById("map"));
+    return;
+  }
+  const zone = document.createElement("div");
+  zone.className = "titlezone";
+  const block = document.createElement("div");
+  block.className = "titleblock";
+  block.style.left = (cfg.x === undefined ? 50 : cfg.x) + "%";
+  block.style.top = (cfg.y === undefined ? 4 : cfg.y) + "%";
+
+  const t = document.createElement("div");
+  t.className = "tb-title";
+  t.textContent = cfg.title || "";
+  block.appendChild(t);
+
+  const links = document.createElement("div");
+  links.className = "tb-links";
+  (cfg.links || []).forEach(function (lk) {
+    const a = document.createElement("a");
+    a.href = "#";
+    a.setAttribute("role", "button");
+    a.textContent = lk.label || lk.title || "";
+    a.addEventListener("click", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (openIcon === a) { closePopup(); return; }
+      // the popup opens centred just below the block
+      const loc = Object.assign({ text: "" }, lk, { x: cfg.x === undefined ? 50 : cfg.x,
+                                                   y: (cfg.y === undefined ? 4 : cfg.y) + 6, centre: true });
+      showPopup(loc, a, map);
+    });
+    links.appendChild(a);
+  });
+  block.appendChild(links);
+
+  if (cfg.hint) {
+    const h = document.createElement("div");
+    h.className = "tb-hint";
+    h.textContent = cfg.hint;
+    block.appendChild(h);
+  }
+  zone.appendChild(block);
+  map.appendChild(zone);
+}
+
 buildIcons(locations, map);
+buildTitleBlock();
 if (SHOW_GUIDES) buildGuides();
 </script>
 
