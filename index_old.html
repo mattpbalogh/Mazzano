@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Interactive map - Mazzano Romano area</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 20px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    background: #f4f1ea;
+  }
+
+  /* The hint line above the map */
+  .hint {
+    max-width: 1000px;
+    margin: 0 auto 10px;
+    text-align: center;
+    font-size: 15px;
+    color: #5a5648;
+  }
+
+  /* Warning shown if a locations file is missing or has a typo */
+  .problem {
+    max-width: 1000px;
+    margin: 0 auto 10px;
+    padding: 8px 12px;
+    background: #fde8e8;
+    border: 1px solid #d33;
+    border-radius: 6px;
+    color: #7a1212;
+    font-size: 14px;
+  }
+
+  /* The map container: everything is positioned relative to this */
+  .map {
+    position: relative;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  .map > img.base {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* Icons: positioned by percentage, centred on the point */
+  .icon {
+    position: absolute;
+    /* Icon size: shrinks and grows WITH the map, so each icon always covers the
+       same part of the picture. The three numbers are: smallest, % of the map's
+       width, largest. Edit them to resize all icons. */
+    width: clamp(26px, 4.4%, 44px);
+    aspect-ratio: 1 / 1;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    transition: transform 0.15s ease;
+  }
+  .icon:hover { transform: translate(-50%, -50%) scale(1.12); }
+  .icon img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+  /* Popup box: outer box stays put, inner part scrolls if text is long */
+  .popup {
+    position: absolute;
+    width: 640px;               /* popup width: change this to make popups wider/narrower */
+    max-width: 100%;
+    max-height: 560px;          /* taller popups scroll inside after this */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    font-size: 14px;
+    line-height: 1.5;
+    color: #2c2c2a;
+    z-index: 20;
+  }
+  .popup .inner {
+    overflow-y: auto;
+    padding: 14px 16px;
+  }
+  /* Picture across the top of the popup */
+  .popup img.hero {
+    display: block;
+    width: calc(100% + 32px);
+    height: 290px;              /* change this to make the picture taller/shorter */
+    object-fit: cover;
+    object-position: center 35%;  /* which part is kept when cropped: 0% = top, 100% = bottom */
+    margin: 0 -16px 10px;
+  }
+  /* Optional second picture further down the popup (image2) */
+  .popup .pair {
+    display: flex;
+    flex-wrap: wrap;            /* on a very narrow screen the text drops below the picture */
+    align-items: flex-start;
+    gap: 14px;
+    margin: 10px 0;
+  }
+  .popup img.pic {
+    display: block;
+    width: calc(50% - 7px);     /* second picture: half the popup width; change 50% to resize */
+    height: auto;               /* keeps the picture's proportions */
+    border-radius: 6px;
+    margin: 0;
+  }
+  .popup .pair .body { flex: 1 1 180px; min-width: 0; }
+  .popup h3 { margin: 0 28px 10px 0; font-size: 18px; }
+  .popup p  { margin: 0 0 8px; }
+  .popup .body { white-space: pre-line; }  /* keeps your line breaks */
+  .popup a  { color: #1a5fb4; }
+  .popup .close {
+    position: absolute;
+    top: 6px; right: 8px;
+    width: 26px; height: 26px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.85);
+    font-size: 20px; line-height: 1;
+    cursor: pointer; color: #555;
+    z-index: 2;
+  }
+  .popup .close:hover { color: #000; background: #fff; }
+
+  /* Optional guide dots showing every named place (see SHOW_GUIDES) */
+  .guide {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    text-align: center;
+    z-index: 5;
+  }
+  .guide .dot {
+    width: 9px; height: 9px;
+    margin: 0 auto;
+    border-radius: 50%;
+    background: #d6336c;
+    border: 1.5px solid #fff;
+  }
+  .guide .name {
+    margin-top: 1px;
+    font-size: 10px;
+    font-weight: 600;
+    color: #8a1c44;
+    background: rgba(255,255,255,0.75);
+    padding: 0 3px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+
+  /* Fallback pin, shown if an icon file can't be found */
+  .icon svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+  /* Second map layer: a picture that opens over the base map */
+  .layer-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(30,30,28,0.5);
+    z-index: 30;
+    cursor: pointer;
+  }
+  .layer {
+    position: absolute;
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 31;
+  }
+  .layer-img {
+    display: block;
+    width: 100%; height: 100%;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  }
+  .layer-back {
+    position: absolute;
+    top: 8px; left: 8px;
+    z-index: 3;
+    border: none;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.92);
+    padding: 6px 12px;
+    font-size: 13px;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  }
+  .layer-back:hover { background: #fff; }
+  .layer.missing {
+    width: 70%; height: 50%;
+    background: #eee;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .layer.missing .layer-img { display: none; }
+  .layer-missing { color: #777; font-size: 14px; }
+
+  /* Coordinate readout (shift+click the map) */
+  #readout {
+    position: fixed;
+    bottom: 10px; left: 10px;
+    background: #2c2c2a; color: #fff;
+    font-size: 12px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    display: none;
+    z-index: 50;
+  }
+</style>
+</head>
+<body>
+
+<!-- Hint line above the map: edit the wording here -->
+<div class="hint">Click on an icon to find out more</div>
+
+<div class="map" id="map">
+  <!-- Your base map. Put the file in the same folder as this HTML file. -->
+  <img class="base" id="baseImage" src="Map_around_mazzano.png" alt="Map">
+</div>
+
+<div id="readout"></div>
+
+<!-- The location blocks live in these two files, in the same folder as this one -->
+<script src="Mazzano_area.js"></script>
+<script src="Mazzano.js"></script>
+
+<script>
+/*
+  ============================================================
+  SETTINGS
+  ============================================================
+  SHOW_GUIDES : true  = draw a pink dot + name for every place in the
+                        PLACES list below, so you can check each one
+                        sits where you expect. Set to false when done.
+*/
+const SHOW_GUIDES = false;
+
+/*
+  LAYER_SCALE : size of the second picture (Mazzano) when it opens, compared with
+                the base map.
+                0.94 = fits just inside the base map (how it used to be)
+                1.00 = exactly as big as the base map
+                1.10 = 10% bigger than the base map, so it overhangs both sides
+                (it is never allowed to be wider than the browser window).
+*/
+const LAYER_SCALE = 1.30;
+
+/*
+  ============================================================
+  PLACES - approximate positions of every name on your map
+  ============================================================
+  Format:  "Name": [x, y]   (percent across, percent down)
+  These are the CENTRE OF EACH LABEL on Map_around_mazzano.png,
+  worked out by eye, so expect to nudge some by a point or two.
+  Use them in a location with   place: "Nepi"   instead of x / y.
+*/
+const places = {
+  "Corchiano":          [66.7,  8.3],
+  "Fabrica di Roma":    [55.3, 11.7],
+  "Tre Croci":          [14.2, 12.8],
+  "Caprarola":          [44.9, 15.3],
+  "Vetralla":           [ 8.1, 16.3],
+  "Falerii":            [65.8, 21.9],
+  "Punta del Lago":     [30.9, 22.4],
+  "Falerii Novi":       [65.5, 25.1],
+  "Civita Castellana":  [77.7, 26.0],
+  "Ronciglione":        [39.7, 26.2],
+  "Vico Matrino":       [21.5, 30.5],
+  "Blera":              [ 3.2, 32.1],
+  "Capranica":          [31.5, 37.0],
+  "Fonte Vivola":       [46.3, 37.5],
+  "Castel Sant'Elia":   [69.3, 39.4],
+  "Marturanum":         [ 9.3, 41.7],
+  "Nepi":               [64.0, 42.2],
+  "Sant'Oreste":        [97.1, 44.9],
+  "Faleria":            [83.5, 47.3],
+  "Colle Farnese":      [58.0, 48.5],
+  "Bassano Romano":     [34.4, 48.7],
+  "Mazzano Romano":     [78.3, 49.7],
+  "Vejano":             [16.4, 50.4],
+  "Rignano Flaminio":   [90.5, 54.1],
+  "Monterosi":          [56.9, 56.4],
+  "Bagni di Vicarello": [38.1, 66.2],
+  "Magliano Romano":    [83.7, 69.0],
+  "Oriolo Romano":      [24.9, 69.2],
+  "Trevignano Romano":  [45.1, 70.4],
+  "Morlupo":            [95.1, 72.6],
+  "Manziana":           [23.0, 78.1],
+  "Lago di Bracciano":  [41.4, 80.8],
+  "Poggio Dell'ellera": [70.2, 84.1],
+  "Sacrofano":          [84.5, 86.9],
+  "Bracciano":          [32.0, 87.5],
+  "Riano":              [95.5, 88.7],
+  "Anguillara Sabazia": [50.1, 91.4],
+  "Formello":           [75.7, 94.4],
+  "Cesano":             [63.7, 95.0],
+  "Vigna di Valle":     [37.4, 96.3],
+  "Le Rughe":           [70.9, 98.8]
+};
+
+/*
+  ============================================================
+  YOUR LOCATIONS - edit this list
+  ============================================================
+  place    : (easiest) a name from the PLACES list above; the position
+             is looked up for you. OR give x and y yourself.
+  x, y     : position as a PERCENTAGE of the map's width/height
+             (0,0 = top-left). Shift+click the map to read them off;
+             they are also copied to your clipboard.
+             If both place and x/y are given, x/y wins.
+  icon     : filename of your icon (PNG or SVG, same folder as this file)
+  image    : optional picture shown across the top of the popup
+  image2   : optional second picture, shown below the main text
+  text2    : optional text shown beside image2 (same backtick rules)
+  image3, text3 ... image5, text5 : further optional picture + text pairs, in the
+             same way (up to 5 pictures and 5 texts in all)
+  title    : popup heading
+  text     : popup body text, wrapped in `backticks` so it can run over
+             several lines. Your line breaks are kept.
+  link     : optional web address - leave as "" for none
+  linkText : optional wording for the link
+  layer    : optional. Instead of a popup, clicking this icon opens a
+             SECOND PICTURE over the map, with its own icons. Give it
+               layer: { image: "Mazzano.jpg", locations: [ ...blocks... ] }
+             The blocks inside use the same fields as any other block, but
+             their x / y are percentages of THAT picture. Shift+click on the
+             second picture to read its coordinates.
+  (An icon file that can't be found is replaced by a plain pink dot.)
+*/
+/*
+  The popup blocks now live in two separate files, loaded just above this script:
+    Mazzano_area.js : the icons on the base map   (list called areaLocations)
+    Mazzano.js      : the icons on the Mazzano picture (list called mazzanoLocations)
+  Edit those files to add or change locations. The only icon defined here is the
+  Mazzano one, which opens the second layer.
+*/
+function loadList(name, file) {
+  let list = null;
+  try { list = eval("typeof " + name + " !== 'undefined' ? " + name + " : null"); } catch (err) {}
+  if (!Array.isArray(list)) {
+    const note = document.createElement("div");
+    note.className = "problem";
+    note.textContent = file + " did not load, or has a typing error in it, so its icons are missing. " +
+                       "Press F12 and look at the Console for the line number.";
+    document.body.insertBefore(note, document.getElementById("map"));
+    return [];
+  }
+  return list;
+}
+
+const locations = [
+
+//MAZZANO ROMANO - opens a second map layer
+  {
+    icon: "Mazzano.svg",
+    // POSITION OF THIS ICON ON THE BASE MAP (x = % across, y = % down) - edit these two numbers
+    x: 65.2, y: 49,
+    title: "Mazzano Romano",
+    layer: {
+      image: "Mazzano map.jpg",
+      locations: loadList("mazzanoLocations", "Mazzano.js")
+    }
+  }
+//END MAZZANO ROMANO BLOCK
+
+].concat(loadList("areaLocations", "Mazzano_area.js"));
+
+const map = document.getElementById("map");
+const baseImage = document.getElementById("baseImage");
+const readout = document.getElementById("readout");
+let openPopup = null;
+let openIcon = null;
+let openLayer = null;
+
+// Shown in place of any icon file that can't be found
+const FALLBACK_ICON =
+  '<svg viewBox="0 0 44 44">' +
+  '<circle cx="22" cy="22" r="18" fill="#d6336c" stroke="#fff" stroke-width="4"/>' +
+  '<circle cx="22" cy="22" r="5" fill="#fff"/></svg>';
+
+function closePopup() {
+  if (openPopup) { openPopup.remove(); openPopup = null; }
+  openIcon = null;
+}
+
+// container = the base map, or a second layer; the popup lives inside it
+function showPopup(loc, iconEl, container) {
+  closePopup();
+  openIcon = iconEl;
+
+  const popup = document.createElement("div");
+  popup.className = "popup";
+
+  let html = '<button class="close" aria-label="Close">&times;</button>';
+  html += '<div class="inner">';
+  html += "<h3>" + (loc.title || "") + "</h3>";
+  if (loc.image) {
+    html += '<img class="hero" src="' + loc.image + '" alt="' + loc.title + '">';
+  }
+  html += '<div class="body">' + loc.text + "</div>";
+  // Extra pictures and texts: image2/text2 up to image5/text5. Each pair is shown with
+  // the picture on the left and its text on the right (either half may be left out).
+  for (let n = 2; n <= 5; n++) {
+    const pic = loc["image" + n];
+    const txt = loc["text" + n];
+    if (pic) {
+      html += '<div class="pair"><img class="pic" src="' + pic + '" alt="' + loc.title + '">';
+      if (txt) { html += '<div class="body">' + txt.trim() + "</div>"; }
+      html += "</div>";
+    } else if (txt) {
+      html += '<div class="body" style="margin:10px 0;">' + txt.trim() + "</div>";
+    }
+  }
+  if (loc.link) {
+    html += '<p style="margin-top:10px;"><a href="' + loc.link + '" target="_blank" rel="noopener">' +
+            (loc.linkText || loc.link) + "</a></p>";
+  }
+  html += "</div>";
+  popup.innerHTML = html;
+
+  popup.querySelector(".close").addEventListener("click", function (e) {
+    e.stopPropagation();
+    closePopup();
+  });
+  popup.addEventListener("click", function (e) { e.stopPropagation(); });
+
+  container.appendChild(popup);
+  openPopup = popup;
+
+  // Place the popup beside the icon: to the right normally, to the left for icons
+  // on the right-hand side, above for icons low on the map. It is then held inside
+  // the map's left and right edges (narrow screens and phones) and kept fully
+  // on screen vertically, however far the page has been scrolled.
+  function place() {
+    const margin = 10;
+    popup.style.maxHeight = Math.min(560, window.innerHeight - 2 * margin) + "px";
+    const cw = container.clientWidth;
+    const ch = container.clientHeight;
+    const pw = popup.offsetWidth;
+    const ph = popup.offsetHeight;
+    let left = (loc.x / 100) * cw + (loc.x > 60 ? -(pw + 30) : 30);
+    left = Math.max(0, Math.min(left, cw - pw));
+    let top = (loc.y / 100) * ch + (loc.y > 55 ? -(ph - 20) : -20);
+    // keep within the visible part of the window (convert window edges to map coordinates)
+    const rect = container.getBoundingClientRect();
+    const minTop = -rect.top + margin;
+    const maxTop = -rect.top + window.innerHeight - ph - margin;
+    top = Math.min(top, maxTop);
+    top = Math.max(top, minTop);
+    // ...and never outside the map itself
+    top = Math.max(0, Math.min(top, ch - ph));
+    popup.style.left = left + "px";
+    popup.style.top = top + "px";
+  }
+  place();
+  // pictures arrive after the popup is placed and change its height, so re-place when they load
+  popup.querySelectorAll("img").forEach(function (im) {
+    if (!im.complete) im.addEventListener("load", place);
+  });
+}
+
+// Builds the icons for a list of locations inside a container
+function buildIcons(list, container) {
+  list.forEach(function (loc) {
+    // Look up x / y from the PLACES list if a place name was given
+    if (loc.x === undefined && loc.place) {
+      if (places[loc.place]) {
+        loc.x = places[loc.place][0];
+        loc.y = places[loc.place][1];
+      } else {
+        console.warn("Unknown place: " + loc.place);
+        return;
+      }
+    }
+
+    const el = document.createElement("div");
+    el.className = "icon";
+    el.style.left = loc.x + "%";
+    el.style.top = loc.y + "%";
+
+    const img = document.createElement("img");
+    img.alt = loc.title || "";
+    img.addEventListener("error", function () { el.innerHTML = FALLBACK_ICON; });
+    img.src = loc.icon;
+    el.appendChild(img);
+
+    el.addEventListener("click", function (e) {
+      e.stopPropagation();
+      if (loc.layer) { showLayer(loc); return; }
+      if (openIcon === el) { closePopup(); } else { showPopup(loc, el, container); }
+    });
+
+    container.appendChild(el);
+  });
+}
+
+function closeLayer() {
+  closePopup();
+  if (openLayer) {
+    window.removeEventListener("resize", openLayer.onResize);
+    openLayer.backdrop.remove();
+    openLayer.layer.remove();
+    openLayer = null;
+  }
+}
+
+// Opens a second picture over the base map, with its own icons
+function showLayer(loc) {
+  closeLayer();
+  const cfg = loc.layer;
+
+  const backdrop = document.createElement("div");
+  backdrop.className = "layer-backdrop";
+  backdrop.addEventListener("click", function (e) { e.stopPropagation(); closeLayer(); });
+
+  const layer = document.createElement("div");
+  layer.className = "layer";
+
+  const img = document.createElement("img");
+  img.className = "layer-img";
+  img.alt = loc.title;
+  layer.appendChild(img);
+
+  const back = document.createElement("button");
+  back.className = "layer-back";
+  back.textContent = "← Back to map";
+  back.addEventListener("click", function (e) { e.stopPropagation(); closeLayer(); });
+  layer.appendChild(back);
+
+  // Fit the picture inside the map, leaving a small margin all round
+  function size() {
+    const nw = img.naturalWidth, nh = img.naturalHeight;
+    if (!nw || !nh) return;
+    let s = Math.min(LAYER_SCALE * map.clientWidth / nw, LAYER_SCALE * map.clientHeight / nh);
+    s = Math.min(s, (document.documentElement.clientWidth - 16) / nw);  // never wider than the window
+    layer.style.width = Math.round(nw * s) + "px";
+    layer.style.height = Math.round(nh * s) + "px";
+  }
+  img.addEventListener("load", size);
+  img.addEventListener("error", function () {
+    layer.classList.add("missing");
+    const msg = document.createElement("div");
+    msg.className = "layer-missing";
+    msg.textContent = cfg.image + " not found";
+    layer.appendChild(msg);
+  });
+
+  layer.addEventListener("click", function (e) {
+    e.stopPropagation();
+    if (e.shiftKey) { reportCoords(e, img); return; }
+    closePopup();
+  });
+
+  map.appendChild(backdrop);
+  map.appendChild(layer);
+  buildIcons(cfg.locations || [], layer);
+
+  window.addEventListener("resize", size);
+  openLayer = { backdrop: backdrop, layer: layer, onResize: size };
+  img.src = cfg.image;
+}
+
+function buildGuides() {
+  Object.keys(places).forEach(function (name) {
+    const g = document.createElement("div");
+    g.className = "guide";
+    g.style.left = places[name][0] + "%";
+    g.style.top = places[name][1] + "%";
+    g.innerHTML = '<div class="dot"></div><div class="name">' + name + "</div>";
+    map.appendChild(g);
+  });
+}
+
+// Shows (and copies) the x / y of a click, relative to a given picture
+function reportCoords(e, imgEl) {
+  const rect = imgEl.getBoundingClientRect();
+  const x = ((e.clientX - rect.left) / rect.width) * 100;
+  const y = ((e.clientY - rect.top) / rect.height) * 100;
+  const snippet = "x: " + x.toFixed(1) + ", y: " + y.toFixed(1) + ",";
+  readout.textContent = snippet;
+  readout.style.display = "block";
+  try {
+    navigator.clipboard.writeText(snippet).then(function () {
+      readout.textContent = snippet + "   (copied)";
+    }, function () {});
+  } catch (err) { /* clipboard not available: the readout still shows it */ }
+}
+
+// Click empty map = close popup. Shift+click = show (and copy) coordinates.
+map.addEventListener("click", function (e) {
+  if (e.shiftKey) { reportCoords(e, baseImage); return; }
+  closePopup();
+});
+
+// Escape closes the popup first, then the second layer
+document.addEventListener("keydown", function (e) {
+  if (e.key !== "Escape") return;
+  if (openPopup) { closePopup(); } else { closeLayer(); }
+});
+
+buildIcons(locations, map);
+if (SHOW_GUIDES) buildGuides();
+</script>
+
+</body>
+</html>

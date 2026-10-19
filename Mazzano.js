@@ -19,6 +19,19 @@ also known as Carla's bar, open from 7am to 9pm, 6 days a week, closed on Thursd
   },
  //END BAR FALCO
 
+//BUS
+  {
+    x: 38, y: 15.2,
+    icon: "Bus.svg",
+    title: "Cotral Busses",
+    text: `This is where busses to Saxa Rubra and other places stop. Check the site below for more information - the busses are rare.
+
+Tickets can be bought from Bar Novella.`,
+link: "https://cotralspa.it/ricerca-orari/",
+Linktext: "Cotral bus timetable",
+  },
+//END Bus block BLOCK
+
 //BAR NOVELLA
   {
     x: 49, y: 19.7,

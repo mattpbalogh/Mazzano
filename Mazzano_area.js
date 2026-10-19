@@ -8,7 +8,7 @@ const areaLocations = [
 
 //Airport
   {
-    x: 33.1, y: 96.9,
+    x: 37.7, y: 96.9,
     icon: "Airport.svg",
     title: "Fiumicino Airport (Aeroporto Leonardo Da Vinci) for Rome",
     text: `Rome airport, generally known as Fiumicino airport after the nearby village, is about 1 hour and 10 minutes from Mazzano.  The airport is well outside Rome, near the sea, and the best place to pick up a hire car, as one doesn't have to drive into Rome.`,
@@ -41,6 +41,21 @@ Fun fact, Tom Cruise and Katie Holmes had their wedding reception in this castle
   },
 //END Bracciano BLOCK
 
+
+//Bunker Soratte
+  {
+    x: 95.1, y: 49.3,
+    icon: "Bunker soratte.svg",
+    image: "Bunker soratte.jpg",
+    title: "Bunker Soratte",
+    text: `The Bunker Soratte is a massive underground military complex carved into the limestone heart of Monte Soratte, located about 50 kilometers north of Rome near Sant’Oreste. Originally begun in 1937 by Benito Mussolini as a secret air-raid shelter for the fascist government and Italian military high command, the tunnels later served as the Mediterranean headquarters for German Field Marshal Albert Kesselring during World War II. During the Cold War, a portion of the labyrinth was retrofitted as an anti-atomic bunker for the Italian president and government. Today, the site operates as a museum managed by local volunteers, offering guided tours through its historic subterranean network, including a virtual reality experience.
+
+Unfortunately, the website is only in Italian.  The Bunker is usually only open in Sundays, and you need to pre-book tickets.  The tour goes for about 2 1/2 hours, so together with Monte Oreste, it is pretty much a day's outing.  The tour groups are big and parking limited, so you need to get there well in advance.  By default, the tours are in Italian, but you can look out for tours in English, or create one, by offering to pay for a minimum of 10 people.  Given the low cost of tours, a private tour for just 4 people, paying for 10, is still well worth the effort, however you need to email them several weeks in advance.`,
+link: "https://bunkersoratte.it/index.html",
+linktext: "Bunker soratte openings and tickets",
+  },
+//END Bunker Sorate BLOCK
+
 //CALCATA
   {
     x: 79.7, y: 52,
@@ -53,8 +68,7 @@ For centuries, the small church in the main square, Chiesa del SS. Nome di Gesù
 image2: "Calcata2.jpg",
 text2: `
 IMPORTANT PARKING INFORMATION
-Arriving by car from Mazzano, drive on past the old town, as vehicle entry is restricted, and drive on up the hill, following the blue parking signs to a large parking lot, where tickets need to be bought for parking.   There is a picturesque path down to Calcata from the top right corner of the carpark.  Note the walk back to the car park is steep!
-`,
+Arriving by car from Mazzano, drive on past the old town, as vehicle entry is restricted, and drive on up the hill, following the blue parking signs to a large parking lot, where tickets need to be bought for parking.   There is a picturesque path down to Calcata from the top right corner of the carpark.  Note the walk back to the car park is steep!`,
   },
 //END Calcata BLOCK
 
@@ -103,7 +117,7 @@ Just outside to the north is a shopping centre with a large convenience store, s
 //CESANO
   {
     x: 51, y: 88.5,
-    icon: "Cesano.svg",
+    icon: "Train.svg",
     image: "Cesano.jpg",
     title: "Cesano",
     text: `Fast train to Trastevere in Rome
@@ -114,6 +128,19 @@ Rougly every hour, but sometimes cancelled.Monitor for random platform changes`,
     linkText: "Timetable"
   },
 //END CESANO BLOCK
+
+//FALERIA
+  {
+    x: 78.1, y: 43.9,
+    icon: "Faleria.svg",
+    image: "Faleria.jpg",
+    title: "Faleria",
+    text: `14 minutes drive
+Originally an ancient Roman transit station known as Stabbia, the historic town center features winding stone alleys dominated by the 12th-century Castello degli Anguillara and the Church of San Giuliano. Today, it serves as a tranquil, scenic getaway for travelers exploring the rugged natural landscapes and ancient ruins of the Tuscia region.
+The central palace-fortress, the Castello degki Aunguillara is undergoing significant multi-phase renovation.`,
+
+  },
+//END FALERIA BLOCK
 
 //LAGO BRACCIANO
   {
@@ -129,6 +156,31 @@ It has perfectly clean water (it is the drinking water supply for Rome', with no
     
   },
 //END LAGO BRACCIANO BLOCK
+
+//LAGO VICO
+  {
+    x: 9.9, y: 14,
+    icon: "Lago vico.svg",
+    image: "Lago vico.jpg",
+    title: "Lago Vico - Lake Vico",
+    text: `25 minutes drive
+
+Lake Vico is a picturesque volcanic lake, 510 metres above sea level.  It is great for hiking, bird watching and swimming.  While there are a couple of kiosks and restaurants, it is also a great place for picnic, with public picnic tables.`,
+    
+  },
+//END LAGO VICO BLOCK
+
+//Le Rughe
+  {
+    x: 61.5, y: 92.5,
+    icon: "Supermarket icon.svg",
+    title: "Le Rughe shopping strip",
+    text: `25 minutes drive
+
+This little shopping strip is ideal for picking up supplies while driving from the airport to Mazzano, with 2 supermarkets, a bakery and a pharmacy..`,
+    
+  },
+//END LAGO VICO BLOCK
 
 //MONTE GELATO
   {
@@ -158,7 +210,30 @@ Monte Gelato has also been features in many films, including  the spaghetti west
   },
 //END MONTE GELATO BLOCK
 
+//NEPI
+  {
+    x: 51.3, y: 44.2,
+    icon: "Nepi.svg",
+    image: "Nepi.jpg",
+    title: "Nepi",
+    text: `Nepi is a charming historic walled town famously known as the "City of Water". 
 
+20 minutes drive
+
+Visitors can explore the imposing 15th-century Rocca dei Borgia once tied to Lucrezia Borgia, walk across the sweeping double-tiered arches of the 18th-century Acquedotto di Nepi, and admire the Renaissance Palazzo Comunale designed by Antonio da Sangallo the Younger. 
+If you park in the lower car park, you can walk up the stairs through the 5 metre thick walls of the old town.  In the Borgo, where you will find The Cathedral of Santa Maria Assunta (Duomo di Nepi) , a grand historic landmark built over a Roman forum and distinguished by an unusual, expansive layout of five parallel aisles. Though its upper basilica showcases a striking 19th-century Neoclassical design following a devastating fire set by Napoleonic troops in 1798, its true crown jewel is the surviving 12th-century Romanesque crypt, featuring a subterranean forest of 24 intricately carved columns – make sure you have some 1 euro coins for lighting.
+The ruins of the Rocca dei Borgia, or Borgia castle can be seen from outside, or visited on weekends, typically an 11:30 am opening, and an afternoon opening That can be checked at the link below.`,
+
+image2:"Nepi2.jpg",
+
+text2:`Trekking around Nepi in the Tuscia region takes you through deep, dramatic volcanic tufa ravines known as forre and ancient sunken roads called cavoni. A standout route leads past the historic Via Amerina and plunges into the crevice-like gorge towards the roaring Cascata del Picchio—a 15-meter double waterfall surrounded by dense, moss-draped greenery that feels like a hidden micro-jungle. Along the way, walking between towering rock walls carved by ancient civilizations and crossing small stream-fords offers a quiet, atmospheric escape.`,
+
+image3:"Nepi3.jpg",
+
+link: "https://www.museociviconepi.it/en/monuments/borgia-castle/",
+    linkText: "Borgia Castle opening hours"
+  },
+//END NEPI BLOCK
 
 //SANT ORESTE
   {
@@ -166,9 +241,56 @@ Monte Gelato has also been features in many films, including  the spaghetti west
     icon: "Sant oreste.svg",
     image: "Sant oreste.jpg",
     title: "Sant Oreste at Monte Soratte",
-    text: `Monte Soratte is on the slopes of Monte Soratte, which can be seen soaring above the area from far away.  The village is famous for its well-preserved defensive walls, narrow winding streets, and panoramic views of the Tiber Valley. Its history dates back at least to 747 AD, and the area is widely known for the Soratte Bunker—a massive network of World War II and Cold War tunnels carved directly into the limestone mountain `,
+    text: `Monte Soratte is on the slopes of Monte Soratte, which can be seen soaring above the area from far away.  The village is famous for its well-preserved defensive walls, narrow winding streets, and panoramic views of the Tiber Valley. Its history dates back at least to 747 AD, and the area is widely known for the Soratte Bunker—a massive network of World War II and Cold War tunnels carved directly into the limestone mountain.`,
   },
 //END SANT ORESTE BLOCK
+
+//Ostia Antica
+  {
+    x: 33.1, y: 96.9,
+    icon: "Ostia antica.svg",
+    image: "Ostia antica.jpg",
+    title: "Ostia Antica ",
+    text: `Rome’s version of Pompeii, without the crowds, easy parking, no queues, and great place to spend a couple of hours on the way to or from the airport.
+
+Ostia Antica was the ancient port city of Rome, situated at the mouth of the Tiber River. Originally founded as a military and trade outpost, it grew into a bustling commercial hub that fed and supplied the capital with grain, oil, and other imported goods. Today, its large Archaeological Park of Ostia Antica preserves the ruins of multi-story apartment buildings, bathhouses, temples, and an ancient theatre, offering a detailed look at everyday life in the Roman Empire, and a small museum.
+.`,
+  },
+//END Ostia Antica BLOCK
+
+//Roma
+  {
+    x: 74, y: 96.9,
+    icon: "Train.svg",
+    image: "Saxa Rubra.jpg",
+    title: "Rome via Saxa Rubra",
+    text: `Mazzano Romano is well placed for day trips or overnight trips to Rome. One way of getting there is to drive to Saxa Rubra station, about 50 minutes away. There is a large carpark there, and while theoretically, the parking tickets are only valid for up to 1 day, parking tickets are rare.  A small tram-like train goes into Rome and back every 20 minutes or so.  The train is pretty basic, and the steep steps make it a challenge if you have baggage, so travel light.The trains goes to Flaminio station, near Piazza del Popolo, which is conveniently central - and from which you can catch the metropolitana to elsewhere in Rome.  Tickets are on the Rome metropolitan system, so are covered by the 100 minute BIT system, and you can just tap-on with a credit card in the rare situations that the machines are working.
+
+If you are feeling particularly energetic, you can even get to Saxa Rubra by bus from Mazzano.  Tickets are sold at Bar Novella, and the bus leaves from .  Check the bus timetable at the link below, typicall there is a bus very early in the morning to Rome, and one late afternoon back.  The bus takes about 1 hour 10 to get to Saxa Rubra.`,
+  },
+//END Roma BLOCK
+
+//SACROFANO
+  {
+    x: 78.5, y: 81,
+    icon: "Sacrofano.svg",
+    image: "Sacrofano.jpg",
+    title: "Sacrofano",
+    text: `Sacrofano is a charming medieval commune with origins tracing back to the ancient Etruscan city of Veii, the town sits within the protected landscape of the Parco di Veio. Its historic center features narrow cobblestone streets, defensive stone structures, the Church of San Giovanni Battista, and a rich feudal history tied to noble dynasties like the Orsini and the Chigi families. 
+
+Jewish Ghetto
+
+In the mid-16th century, the highest part of the Castle, the Castrum, was transformed from a military apparatus into a secluded residential nucleus, the ghetto, destined for the Jewish community that had arrived from Fiumefreddo Bruzio, in the province of Cosenza (Calabria). The ghetto was accessible from a single door closed at sunset and opened again only at dawn.
+
+The racial laws sanctioned by Pope Paul IV’s encyclical Cum nimis absurdum of 1555 were reported in the Statute of Scrofano (1554) listing a series of limitations on the rights of the Jewish community and imposing their conduct. The set of regulations (chapters) eventually became the foundation of an agreement drafted between the Calabrian Jew Simone Cuscio and the Orsini family for the opening of a loan bank in Scrofano in 1543. (Ebraismo dell’Italia Meridionale Peninsulare dalle origini al 1541, Esposito, 1996).
+
+With the growth of the Jewish population, dwellings rose by adding alleys with tall housings equipped with stairs, which were generally very crowded. Within the ghetto, there was an oven for the preparation of unleavened bread and a synagogue, both inside homes. Still today, in a private house, there is a Torah Ark where the Sefer Torah scrolls were kept. The dead were buried in the ghetto.
+
+Not having access to public offices, Jews were treated as foreigners. On the day of the Sabbath and during the Easter Triduum they were obliged to stay home. Yet, whoever offended or harmed a Jew was punished (Statute, 1554).
+
+Life in the Jewish ghetto ended in the second half of the XVIII century with the unification of Italy. The Capture of Rome in 1870 marked the end of the temporal power of the Church and the definitive abolition of ghettos.`,
+  },
+//END SACROFANO BLOCK
 
 
 //SUTRI
@@ -191,7 +313,31 @@ On the Eastern side of the main road (Via Cassia)is the steep road up to the tow
   },
 //END SUTRI BLOCK
 
+//TREIA Valley
+  {
+    x: 72.8, y: 59.5,
+    icon: "Treia.svg",
+    image: "Treia.jpg",
+    title: "Treia valley",
+    text: `The Treia Valley is a hiking paradise at the doorstep of Mazzano Romano, to which many people from Rome and elsewhere flock on the weekends. Bushwalking in the Regional Park of Valle del Treia means walking through millennia of human history, where nature and ancient civilizations are seamlessly intertwined. Long before the Romans dominant power took hold, this valley was the heartland of the Faliscan people, a distinct Pre-Roman civilization with their own language and culture, who built their brilliant, fortified capital at Narce—an ancient town spread across the ridges of Monte Li Santi, Narce, and Monte Greco right outside Mazzano. As you hike through the valley's deep gorges, you will stumble upon dramatic Bronze Age caves carved directly into the soft tufa cliffs, which served as early dwellings and later as intricate Faliscan necropolises. Near the base of Narce, the remains of an ancient Faliscan temple dedicated to a water deity remind travelers of the valley's sacred past.
+🚶 What You Will See and Experience on the Trails
+Setting out on foot from Mazzano Romano offers a sensory journey through mist-shrouded canyons, rushing rivers, and medieval ruins. The trails are alive with the sound of the Treia River, the scent of damp moss, and the shade of towering ferns.`,
 
+image2: "Calcata1.jpg",
+
+text2: `•	The Trek to Calcata: The most iconic walk from Mazzano follows the river trail to Calcata Vecchia, a surreal medieval village perched precariously atop a sheer tufa cliff. Approaching it on foot from the valley floor allows you to watch the town gradually materialize out of the canopy like a fairytale fortress.`,
+
+image3: "Monte gelato-sketch.jpg",
+
+text3: `•	The Route to Monte Gelato: Heading in the opposite direction brings you to the magical waterfalls of Monte Gelato. Here, the Treia River fractures into a series of cascading pools framed by an ancient, stone-built watermill, making it a perfect, tranquil rest stop.
+
+•	The Path to Nepi: For a longer, more ambitious trek, you can push northward toward Nepi, following old pastoral tracks to a town famous for its massive Borgia fortress and ancient aqueducts.
+
+•	The Via Francigena Connection: Walking these paths also connects you to a grander spiritual tradition; the valley intersects closely with variants of the Via Francigena, the epic medieval pilgrimage route stretching all the way from Canterbury to the Vatican. As you traverse the sun-dappled gorges, you are treading the exact same volcanic stone walked by centuries of weary pilgrims seeking their final descent into Rome.`,
+    link: "https://www.alltrails.com/parks/italy/lazio/parco-regionale-valle-del-treja",
+    linkText: "Treia valley map"
+  },
+//END TREIA VALLEY BLOCK
 
 //TREVIGNANO
   {
@@ -213,7 +359,24 @@ Museo Civico Etrusco Romano - located in the town hall on Piazza Vittorio Emanue
 Church of Santa Maria Assunta - a 16th-century church nestled within the historic center's labyrinth of stone alleys, notable for housing The Death of the Virgin fresco by Renaissance painter Pellegrino da Modena.`,
     link: "https://en.wikipedia.org/wiki/Mazzano_Romano",
     linkText: "Parking suggestion"
-  }
+  },
 //END TREVIGNANO BLOCK
+
+
+//VITERBO
+  {
+    x: 3.2, y: 26.6,
+    icon: "Viterbo.svg",
+    image: "Viterbo.jpg",
+    title: "Viterbo",
+    text: `A mini-Rome, walled city with restaurants and delicatessens, fashion shops, and a great museum.
+
+50 minutes drive
+
+Viterbo is a historic city in central Italy’s Lazio region, famed as the "City of the Popes" for serving as a 13th-century residence for the Roman Curia. Located north of Rome in the ancient Tuscia area, it features one of Europe's best-preserved medieval quarters—particularly the San Pellegrino district with its distinct stone "profferli" outdoor staircases—alongside the majestic Palazzo dei Papi and natural thermal springs
+
+Visit the National Etruscan Museum Rocca Albornoz (Museo Nazionale Etrusco di Rocca Albornoz), where the centerpiece is a rare, highly prestigious 6th-century BC Etruscan parade chariot (known as a biga). Discovered in 1967 inside the "Tomb of the Chariot" in nearby Ischia.`,
+  }
+//END VITERBO BLOCK
 
 ];
