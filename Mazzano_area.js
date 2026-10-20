@@ -260,6 +260,19 @@ Ostia Antica was the ancient port city of Rome, situated at the mouth of the Tib
 
 //Roma
   {
+    x: 19.6, y: 22.8,
+    icon: "Ronciglione.svg",
+    image: "Ronciglione.jpg",
+    title: "Ronciglione",
+    text: `Crowned Italy’s Borgo dei Borghi in 2023, the stunning medieval and Renaissance hill town of Ronciglione is dramatically perched on a volcanic tuff-rock ridge overlooking Lake Vico and is famous for its rich history under the Farnese family alongside two major cultural festivals.`,
+image2: "Ronciglione carnevale.jpg",
+
+text2: `Its most celebrated event is the historic Carnival of Ronciglione, one of central Italy's oldest winter festivals, which typically takes place every year during February (spanning from late January through Shrove Tuesday) and fills the streets with spectacular costume parades, allegorical floats, and the satirical Red Noses guild. The town's other major spectacle is the Palio delle Corse a Vuoto (Riderless Horse Races), a thrilling, centuries-old competition between local neighborhoods where horses gallop full-speed through the paved city streets without jockeys; this event takes place annually in the heart of summer, typically over a weekend in late July, with modern editions famously moving the trials and final races into the cooler evening and night hours..`,
+  },
+//END Roncligione BLOCK
+
+//Roma
+  {
     x: 74, y: 96.9,
     icon: "Train.svg",
     image: "Saxa Rubra.jpg",
@@ -295,7 +308,7 @@ Life in the Jewish ghetto ended in the second half of the XVIII century with the
 
 //SUTRI
   {
-    x: 29.2, y: 41.3,
+    x: 29.2, y: 41.2,
     icon: "Sutri.svg",
     image: "Sutri.jpg",
     title: "Sutri",
