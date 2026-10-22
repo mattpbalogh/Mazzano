@@ -202,7 +202,7 @@
   }
   .layer-back {
     position: absolute;
-    top: 8px; left: 8px;
+    top: 26px; left: 8px;       /* "Back to map" button: increase the first number to move it lower */
     z-index: 3;
     border: none;
     border-radius: 16px;
@@ -266,10 +266,19 @@ const SHOW_GUIDES = false;
                 the base map.
                 0.94 = fits just inside the base map (how it used to be)
                 1.00 = exactly as big as the base map
-                1.10 = 10% bigger than the base map, so it overhangs both sides
+                1.13 = 13% bigger than the base map, so it overhangs both sides (was 1.10)
                 (it is never allowed to be wider than the browser window).
 */
-const LAYER_SCALE = 1.10;
+const LAYER_SCALE = 1.25;
+
+/*
+  LAYER_DROP : how far (in pixels) to move the Mazzano picture DOWN from its normal,
+               centred position. Increase it to bring the picture lower, 0 for none.
+               (Whatever the number, the picture is also moved down just enough that
+               its top edge - and the "Back to map" button - never goes above the top
+               of the page.)
+*/
+const LAYER_DROP = 10;
 
 /*
   ============================================================
@@ -561,8 +570,13 @@ function showLayer(loc) {
     if (!nw || !nh) return;
     let s = Math.min(LAYER_SCALE * map.clientWidth / nw, LAYER_SCALE * map.clientHeight / nh);
     s = Math.min(s, (document.documentElement.clientWidth - 16) / nw);  // never wider than the window
-    layer.style.width = Math.round(nw * s) + "px";
-    layer.style.height = Math.round(nh * s) + "px";
+    const lw = Math.round(nw * s), lh = Math.round(nh * s);
+    layer.style.width = lw + "px";
+    layer.style.height = lh + "px";
+    // bring the picture down: LAYER_DROP, plus whatever is needed to keep its top edge on the page
+    const mapTop = map.getBoundingClientRect().top + window.pageYOffset;
+    const topEdge = mapTop + map.clientHeight / 2 - lh / 2 + LAYER_DROP;
+    layer.style.marginTop = (LAYER_DROP + Math.max(0, 8 - topEdge)) + "px";
   }
   img.addEventListener("load", size);
   img.addEventListener("error", function () {
