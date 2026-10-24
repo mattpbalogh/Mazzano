@@ -26,6 +26,28 @@ const areaLocations = [
   },
 //END Anquillara BLOCK
 
+
+//BAGNIOREGIO AND BOLSENA
+
+  {
+    x: 8.5, y: 26.6,
+    icon: "Civita bagnoregio.svg",
+    title: "Civita Bagnoregio, Bolsena and Lake Bolsena",
+    image: "Civita bagnoregio 1.jpg",
+    text: `Just north of Viterbo are many spectacular places to visit.
+
+Civita di Bagnoregio (1 1/2 hrs drive) is on the site of a 2,500-year-old Etruscan village dramatically isolated atop a crumbling volcanic plateau in Lazio, Italy, is famously nicknamed "il paese che muore" (the dying city). Relentless geological erosion causes the surrounding cliffs to fracture and collapse, leaving a medieval citadel that is only accessible via a pedestrian footbridge. `,
+
+image2:"civita bagnoregio 2.jpg",
+
+text2: `To combat this slow-motion destruction, modern geologists and engineers have implemented advanced technological structural monitoring systems. They have reinforced the fragile underground caverns with massive steel anchoring rods, injected structural nails, and concrete wells to stabilize the terrain. These vital engineering interventions are funded directly by a €5 entrance fee paid by global tourists.The entry fee has successfully transformed the threat of over-tourism into a self-sustaining conservation model, running alongside an official bid for UNESCO World Heritage protection.`,
+
+image3: "Bolsena.jpg",
+
+text3: `Spectacular Lake Bolsena (1 1/2 hrs drive) is Europe’s largest volcanic crater lake and one of Italy’s most picturesque hidden gems. Formed over 300,000 years ago in a collapsed volcanic caldera, its incredibly clear, swimmable waters are framed by striking black-sand beaches and rolling hills draped in olive groves and vineyards. The shoreline is dotted with postcard-perfect medieval fishing villages, while two private, monument-rich islands rise dramatically from the centre. Striking a perfect balance between wild natural beauty and quiet historic charm, it remains a tranquil, highly photogenic alternative to Italy's crowded northern lakes.`,
+  },
+//END BAGNIO REGIO AND BOLSEA BLOCK
+
 //Bracciano
   {
     x: 6.3, y: 81.9,
@@ -375,6 +397,17 @@ Church of Santa Maria Assunta - a 16th-century church nestled within the histori
   },
 //END TREVIGNANO BLOCK
 
+//TREVIGNANO
+  {
+    x: 10.0, y: 63.5,
+    icon: "Truffle.svg",
+    image: "Truffle.jpg",
+    title: "Truffle hHut",
+    text: `XXX`,
+    link: "https://en.wikipedia.org/wiki/Mazzano_Romano",
+    linkText: "Parking suggestion"
+  },
+//END TRUFFLE HUNT BLOCK
 
 //VITERBO
   {

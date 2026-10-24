@@ -52,6 +52,14 @@
     transition: transform 0.15s ease;
   }
   .icon:hover { transform: translate(-50%, -50%) scale(1.12); }
+  /* Icons on the BASE map are partly see-through (set AREA_ICON_OPACITY in the settings below),
+     so they hide less of the map; they turn solid when the pointer is over them.
+     Icons on the Mazzano picture are not affected. */
+  .map > .icon {
+    opacity: var(--area-icon-opacity, 1);
+    transition: transform 0.15s ease, opacity 0.15s ease;
+  }
+  .map > .icon:hover { opacity: 1; }
   .icon img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 
   /* Title block on the base map ("Around Mazzano Romano" + three links + hint).
@@ -118,22 +126,23 @@
     object-position: center 35%;  /* which part is kept when cropped: 0% = top, 100% = bottom */
     margin: 0 -16px 10px;
   }
-  /* Optional second picture further down the popup (image2) */
+  /* Optional extra pictures further down the popup (image2 ... image5).
+     The picture sits on the left and its text wraps around it; once the text is longer than
+     the picture, it carries on across the full width of the popup. */
   .popup .pair {
-    display: flex;
-    flex-wrap: wrap;            /* on a very narrow screen the text drops below the picture */
-    align-items: flex-start;
-    gap: 14px;
+    display: flow-root;         /* the box grows to hold the picture, so the next picture starts below it */
     margin: 10px 0;
   }
   .popup img.pic {
-    display: block;
-    width: calc(50% - 7px);     /* second picture: half the popup width; change 50% to resize */
+    float: left;
+    width: calc(50% - 7px);     /* extra picture: half the popup width; change 50% to resize */
     height: auto;               /* keeps the picture's proportions */
     border-radius: 6px;
-    margin: 0;
+    margin: 0 14px 6px 0;       /* gap to the text on the right, and below the picture */
   }
-  .popup .pair .body { flex: 1 1 180px; min-width: 0; }
+  @media (max-width: 560px) {
+    .popup .pair .body { clear: both; }   /* narrow screens (phones): the text goes below the picture */
+  }
   .popup h3 { margin: 0 28px 10px 0; font-size: 18px; }
   .popup p  { margin: 0 0 8px; }
   .popup .body { white-space: pre-line; }  /* keeps your line breaks */
@@ -281,6 +290,14 @@ const LAYER_SCALE = 1.25;
 const LAYER_DROP = 10;
 
 /*
+  AREA_ICON_OPACITY : how see-through the icons on the BASE map are.
+                      1 = solid (as before), 0.7 = slightly see-through, 0.5 = half see-through.
+                      An icon becomes solid when the pointer is over it.
+                      (The icons on the Mazzano picture are not changed.)
+*/
+const AREA_ICON_OPACITY = 0.7;
+
+/*
   ============================================================
   PLACES - approximate positions of every name on your map
   ============================================================
@@ -401,6 +418,7 @@ const locations = [
 ].concat(loadList("areaLocations", "Mazzano_area.js"));
 
 const map = document.getElementById("map");
+map.style.setProperty("--area-icon-opacity", AREA_ICON_OPACITY);
 const baseImage = document.getElementById("baseImage");
 const readout = document.getElementById("readout");
 let openPopup = null;
@@ -433,8 +451,8 @@ function showPopup(loc, iconEl, container) {
     html += '<img class="hero" src="' + loc.image + '" alt="' + loc.title + '">';
   }
   html += '<div class="body">' + loc.text + "</div>";
-  // Extra pictures and texts: image2/text2 up to image5/text5. Each pair is shown with
-  // the picture on the left and its text on the right (either half may be left out).
+  // Extra pictures and texts: image2/text2 up to image5/text5. Each picture floats on the left
+  // with its text wrapping around it, then running full width below it (either half may be left out).
   for (let n = 2; n <= 5; n++) {
     const pic = loc["image" + n];
     const txt = loc["text" + n];
