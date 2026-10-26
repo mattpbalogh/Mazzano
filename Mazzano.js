@@ -8,7 +8,7 @@ const mazzanoLocations = [
 
 //BAR FALCO
   {
-    x: 10.2, y: 85.2,
+    x: 11.2, y: 85.2,
     icon: "Restaurant icon.svg",
     image: "Bar falco.jpg",
     title: "Bar Falco",
@@ -21,86 +21,86 @@ also known as Carla's bar, open from 7am to 9pm, 6 days a week, closed on Thursd
 
 //BUS
   {
-    x: 38, y: 15.2,
+    x: 38, y: 14.2,
     icon: "Bus.svg",
-    title: "Cotral Busses",
-    text: `This is where busses to Saxa Rubra and other places stop. Check the site below for more information - the busses are rare.
+    title: "Cotral Buses",
+    text: `This is where buses to Saxa Rubra and other places stop. Check the site below for more information - the buses are rare.
 
 Tickets can be bought from Bar Novella.`,
 link: "https://cotralspa.it/ricerca-orari/",
-Linktext: "Cotral bus timetable",
+linkText: "Cotral bus timetable",
   },
 //END Bus block BLOCK
 
 //BAR NOVELLA
   {
-    x: 49, y: 19.7,
+    x: 49, y: 19,
     icon: "Coffee icon.svg",
     image: "Bar novella-sketch.jpg",
     title: " Bar Novella",
     text: `Bar Novella
-also known as the three sisters, bar at the top of the hill. Amazing at breakfast time. It makes excellent aperitifs. Payment is made at the checkout. Traditional gnocchi on Thursday for lunch. Closed on Mondays.`,
+also known as the Three Sisters, bar at the top of the hill. Amazing at breakfast time. It makes excellent aperitivi. Payment is made at the checkout. Traditional gnocchi on Thursday for lunch. Closed on Mondays.`,
   },
  //END BAR Novella
 
 //OSTERIA FALISCA
   {
-    x: 83.9, y: 7.9,
+    x: 85.6, y: 7.6,
     icon: "Restaurant icon.svg",
     image: "Osteria falisca 1-sketch.jpg",
     title: "Osteria Falisca",
     text: `Osteria Falisca
-An extensive menu of amazing seafood, meat, vegetarian and gluten-free gourmet dishes with very low prices.  Also does terrific pizzas.   Open for dinner, Wednesday to Sunday, from 8pm. No walk-in, you need to book by sending a message to Chiara via Whatsapp on +39 333 585 8528.`,
+An extensive menu of amazing seafood, meat, vegetarian and gluten-free gourmet dishes with very low prices.  Also does terrific pizzas.   Open for dinner on Wednesdays and Thursdays, and for both lunch and dinner on Fridays, Saturdays and Sundays. Booking in advance is essential by sending a message to Chiara via WhatsApp on +39 333 585 8528.`,
 image2:"Osteria falisca 2-sketch.jpg",
  },
  //END OSTERIA FALISCA
 
 //DOMUS BIRRAE PUB
   {
-    x: 53.7, y: 45.2,
+    x: 53.7, y: 45,
     icon: "Restaurant icon.svg",
     image: "Domus birrae pub-sketch.jpg",
     title: " Domus Birrae",
-    text: `Domus Birrae Pub style restaurant with great background music, and occasional live music on Saturdays.  Pastas, second courses and hamburgers. Try the tagliere or Cacio e pepe.  Three beers on tap. Open from Tuesday to Sunday after 8 pm only. Sometimes it opens only late. Contact +39 2372 5578.`,
+    text: `Domus Birrae is a pub-style restaurant with great background music, and occasional live music on Saturdays.  Pastas, second courses and hamburgers. Try the tagliere or Cacio e pepe.  Three beers on tap. Open from Tuesday to Sunday after 8 pm only. Sometimes it opens only late. Contact +39 2372 5578.`,
 },
  //END DOMUS BIRRAE PUB
 
 //SUPERMARKET
   {
-    x: 88.9, y: 30.7,
+    x: 88.9, y: 30.4,
     icon: "Supermarket icon.svg",
     title: "Supermarket",
-    text: `Carrefour supermkarket
-Small but good (except fruit – and no instant coffee).  It has several delicatessen counters. open from Monday to Saturday, 8:30 to 13:30 and from 16:30 to 20:30, Sunday 9:00 to 13:00. There is a fish shop across the street and up the hill from the supermarket.`,
+    text: `Carrefour supermarket
+Small but good (except fruit – and no instant coffee).  It has several delicatessen counters. Open from Monday to Saturday, 8:30 to 13:30 and from 16:30 to 20:30, Sunday 9:00 to 13:00. There is a fish shop across the street and up the hill from the supermarket.`,
 },
  //END SUPERMARKET
 
 //PEPES
   {
-    x: 11.3, y: 90.0,
+    x: 12, y: 90.0,
     icon: "Delicattesen icon.svg",
     image: "Mini-market.jpg",
     title: " Mini market Sbordoni",
-    text: `Mini market, an alimentary also known as Pepe's, open from 8am to noon and 5pm to 7pm Monday to Saturday, offers basic groceries, and has a traditional cheese, bread and pizza bread and salumi counter, where you can practice your Italian or sign language.  Get there early for the terrific rosette rolls.    A must visit for making your own lunches for home or picnics.`,
+    text: `Mini market, an alimentari also known as Pepe's, open from 8am to noon and 5pm to 7pm Monday to Saturday, offers basic groceries, and has a traditional cheese, bread and pizza bread and salumi counter, where you can practise your Italian or sign language.  Get there early for the terrific rosette rolls.    A must visit for making your own lunches for home or picnics.`,
 },
  //END PEPES
 
 //FRUTERIA
   {
-    x: 51.4, y: 26.6,
+    x: 51.4, y: 26.2,
     icon: "Fruiteria icon.svg",
     image: "Fruiteria.jpg",
     title: "Melyfrutta Fruit and Veggie shop",
     text: `A wide range of fresh fruit and veggies, and best of all, provides wine on tap. Open 7:00 to 13:00 and 16:00 to 19:30. 
 
-Bring an empty milk bottle of similar, and have it filled up.  Choice of xxxx, at xxx price.
+Bring an empty milk bottle or similar, and have it filled up.  Choice of 4 wines, at €1.70 to €2.00 per litre.
 `,
 },
  //END FRUTERIA
 
 //FARMACIA
   {
-    x: 6.9, y: 20.0,
+    x: 7.4, y: 19.4,
     icon: "Farmacia icon.svg",
     image: "Farmacia-sketch.jpg",
     title: "Pharmacy",
@@ -110,12 +110,12 @@ Bring an empty milk bottle of similar, and have it filled up.  Choice of xxxx, a
 
 //EDICOLA
   {
-    x: 29.1, y: 29.4,
+    x: 29.3, y: 29,
     icon: "Edicola icon.svg",
     image: "Edicola-sketch.jpg",
-    title: "Stationary store with printing",
+    title: "Stationery store with printing",
     text: `Need anything printed?
-DAYS???? Open 7.30am – 1.00pm and 4.30pm – 7.00pm, where it is possible to print the documents. You can send them as an email to Irene at albanuova@hotmail.com..`,
+Open 7.30am – 1.00pm and 4.30pm – 7.00pm Monday to Saturday (and Sunday mornings), where it is possible to print documents. You can send them as an email to Irene at albanuova@hotmail.com.`,
 },
  //END EDICOLA
 
@@ -127,11 +127,11 @@ DAYS???? Open 7.30am – 1.00pm and 4.30pm – 7.00pm, where it is possible to p
     title: "ATM",
 text: ` The only ATM is at the post office, with a maximum withdrawal of €250, and can run out. You can select English to use the ATM.`,
 },
- //END EDICOLA
+ //END ATM
 
 //CAR CHARGING
   {
-    x: 8.9, y: 30,
+    x: 8.9, y: 29.8,
     icon: "Car charging icon.svg",
     title: "Car Charging",
 text: ` ENEL Way car fast charging point. Download the app, you can book the charging points in advance, although in Mazzano that is hardly necessary. `,
@@ -143,9 +143,9 @@ text: ` ENEL Way car fast charging point. Download the app, you can book the cha
     x: 50.4, y: 63.7,
     icon: "Cheese icon.svg",
     image: "Cheese shop1-sketch.jpg",
-    title: "Caseficio Ingemi Cheese shop",
+    title: "Caseificio Ingemi Cheese shop",
 text: `Artisanal sheep and goat cheeses exclusively made on the premises.
-  Open 9:00 to 13:00 and 16:30 t0 19:30 Tuesday to Saturday, except close Thursday afternoons.  Contact 3317472143`,
+  Open 9:00 to 13:00 and 16:30 to 19:30 Tuesday to Saturday, except closed Thursday afternoons.  Contact 3317472143`,
 
 image2:"Cheese shop2-sketch.jpg",
 },
@@ -158,8 +158,8 @@ image2:"Cheese shop2-sketch.jpg",
     image: "Mazzano museum-sketch.jpg",
     title: "Mazzano Museum",
 text: `Small, but very interesting and expanding. It can be found on the left northern side of Piazza Giovanni XXIII (Pope John XXIII, from 1958 to 1968), the main square of modern Mazzano. 
-The museum is labelled only be a small bljue sign saying "MAVNA".
-The main museum in Mazzano Romano is the MAVNA (Museo Archeologico Virtuale di Narce), a virtual and physical archaeological museum dedicated to the ancient Faliscan city of Narce and the Treja Valley. It tells the history of the area since the Faliscan era. The museum has multi-media displays and has a video room about where which museums the antiquities of the area have wound up in.  Usually open Friday, Saturday and Sunday mornings, entry € 3 (cash).`,
+The museum is labelled only by a small blue sign saying "MAVNA".
+The main museum in Mazzano Romano is the MAVNA (Museo Archeologico Virtuale di Narce), a virtual and physical archaeological museum dedicated to the ancient Faliscan city of Narce and the Treia Valley. It tells the history of the area since the Faliscan era. The museum has multi-media displays and has a video room about which museums the antiquities of the area have ended up in.  Usually open Friday, Saturday and Sunday mornings, entry € 3 (cash).`,
 link: "https://www.mavna.it/",
 },
  //END MAZZANO MUSEUM
@@ -169,9 +169,9 @@ link: "https://www.mavna.it/",
     x: 48.6, y: 71.4,
     icon: "Parking icon.svg",
     title: "Parking",
-text: ` Parking – to get to the car park, come down the hill from the roundabout – the speed limit is 10 kmh.  At the bottom of the hill, there is a single lane entering Piazza Umberto 1.  Slow to less than a walking pace and be prepared to reverse if there is a car coming the other way. In Piazza Umberto 1, turn tight left, and you will find the car park.`,
+text: ` Parking – to get to the car park, come down the hill from the roundabout – the speed limit is 10 km/h.  At the bottom of the hill, there is a single lane entering Piazza Umberto I.  Slow to less than a walking pace and be prepared to reverse if there is a car coming the other way. In Piazza Umberto I, turn hard left, and you will find the car park.`,
 image2: "Umberto1.jpg",
-text2: `Umberto 1 was the second King of Italy from 1878 to 1900, and son of Victor Emmanuell II.
+text2: `Umberto I was the second King of Italy from 1878 to 1900, and son of Victor Emmanuel II.
 
 He had a great moustache!`,
 },
@@ -179,13 +179,13 @@ He had a great moustache!`,
 
 //SAN NICOLA DI BARI
   {
-    x: 62.3, y: 36.7,
+    x: 62.3, y: 36.5,
     icon: "Church icon.svg",
     image: "Mazzano church-sketch.jpg",
     title: "San Nicola di Bari",
-text: ` Built in the 1950s, after the original church in the Borgo of Mazzano Romano was condemned as the result of a lightning strike in 1940.  The church (in Piazza Giovanni XXIII) features an amazing painting of the local priest repelling German soldiers during the world war II.  Masses are usually Sundays at 8:00, 10:00 and 11:30, but can vary.`,
+text: ` Built in the 1950s, after the original church in the Borgo of Mazzano Romano was condemned as the result of a lightning strike in 1940.  The church (in Piazza Giovanni XXIII) features an amazing painting of the local priest repelling German soldiers during the World War II.  Masses are usually Sundays at 8:00, 10:00 and 11:30, but can vary.`,
 image2: "Mazzano church painting.jpg",
-text2: `The painting inside the Chiesa di San Nicola di Bari commemorates the "Miracle of Mazzano Romano," a real event from World War II where the local parish priest courageously confronted invading German soldiers at the entrance of the village. Invoking the protection of the town's patron saint, Saint Nicholas, the priest stood his ground and successfully turned back the heavily armed Nazi troops, sparing the town from a planned wartime raid or massacre. The commemorative artwork was placed in the church by the grateful community to honor the priest's bravery and thank Saint Nicholas for the divine intercession that saved their lives.`,
+text2: `The painting inside the Chiesa di San Nicola di Bari commemorates the "Miracle of Mazzano Romano," a real event from World War II where the local parish priest courageously confronted invading German soldiers at the entrance of the village. Invoking the protection of the town's patron saint, Saint Nicholas, the priest stood his ground and successfully turned back the heavily armed Nazi troops, sparing the town from a planned wartime raid or massacre. The commemorative artwork was placed in the church by the grateful community to honour the priest's bravery and thank Saint Nicholas for the divine intercession that saved their lives.`,
 },
  //END SAN NICOLA DI BARI
 
@@ -197,7 +197,7 @@ text2: `The painting inside the Chiesa di San Nicola di Bari commemorates the "M
     title: "San Sebastiano",
     text: `Technically a church, but the size of a chapel dating back to 1465.
 The frescoes date from the period between the late 15th and early 16th centuries.
-The frescoes on the left depict the figure of the Madonna flanked by Saint Anne and the Christ Child while the frescoes in the apse feature the figure of the Savior at the top and Saint Sebastian below, depicted in the traditional manner of his martyrdom, flanked by Saint Roch and Saint Gregory.`,
+The frescoes on the left depict the figure of the Madonna flanked by Saint Anne and the Christ Child while the frescoes in the apse feature the figure of the Saviour at the top and Saint Sebastian below, depicted in the traditional manner of his martyrdom, flanked by Saint Roch and Saint Gregory.`,
 },
  //END CHIESA DI SAN SEBASTIANO
 
@@ -207,7 +207,7 @@ The frescoes on the left depict the figure of the Madonna flanked by Saint Anne 
     icon: "Antisa.svg",
     image: "Antisa.jpg",
     title: "Antisà",
-    text: `This parking area is in the remains of what was once the 16th century Church of San Nicola all'Antisà: There seems to have been an earlier version of the church mentioned in a papal bull issued by Innocent IV in 1244, this ancient church was located near the medieval castle of Mazzano. It was originally part of a fortified settlement and for centuries represented an important religious and community center for the village.
+    text: `This parking area is in the remains of what was once the 16th century Church of San Nicola all'Antisà. There seems to have been an earlier version of the church mentioned in a papal bull issued by Innocent IV in 1244. This ancient church was located near the medieval castle of Mazzano. It was originally part of a fortified settlement and for centuries represented an important religious and community centre for the village.
 
 The church was demolished in 1940 as the result of damage from a lightning strike, replaced by the new church in Piazza Giovanni XXIII.
 `,
@@ -223,7 +223,7 @@ The church was demolished in 1940 as the result of damage from a lightning strik
     
 text:`This is the Borgo, or old town of Mazzano Romano. It was originally inhabited by the Faliscans, who were an ancient Italic people who lived in the area between the River Tiber and Monte Cimino, north of Rome. Their language was a close cousin of Latin, but their way of life was much like that of their Etruscan neighbours. From their capital at Falerii (today’s Civita Castellana), they resisted Rome for centuries, until they were finally defeated in 241 BC.
 
-Mazzano first appears in written records in 945 AD, when Prince Alberic of Rome gave it to the monastery of Saints Andrew and Gregory. By then, people had moved up onto the steep tufa cliffs above the Treja valley to escape raiders, and the village grew into a walled hilltop fortress with a single entrance. Later it passed to the powerful Anguillara counts.`,
+Mazzano first appears in written records in 945 AD, when Prince Alberic of Rome gave it to the monastery of Saints Andrew and Gregory. By then, people had moved up onto the steep tufa cliffs above the Treia valley to escape raiders, and the village grew into a walled hilltop fortress with a single entrance. Later it passed to the powerful Anguillara counts.`,
 
 image2:"Tower sketch.jpg",
 
@@ -233,13 +233,13 @@ image3:"Mazzano alley.jpg",
 
 text3: `Stories also tell of a penal settlement called “Messano.” Some writers place it in Roman times. Local historians link it to the medieval papal era, when the town’s deep cellars may have held prisoners. Neither version is firmly documented.
 
-In 1658 the Del Drago princes inherited Mazzano and ran it as a huge private estate. Their hold lasted almost three centuries. It ended only with Italy’s land reform of 1950, which took the land and gave it to the local farmers who had worked it for generations..`,
+In 1658 the Del Drago princes inherited Mazzano and ran it as a huge private estate. Their hold lasted almost three centuries. It ended only with Italy’s land reform of 1950, which took the land and gave it to the local farmers who had worked it for generations.`,
 },
  //END Mazzano Borgo
 
 //WALKING TO SANTA MARIA
   {
-    x: 89.4, y: 11.4,
+    x: 90.3, y: 11,
     icon: "Hiking right icon.svg",
     image: "Santa maria.jpg",
     title: "Santa Maria di Castelvecchio walk",
@@ -247,7 +247,7 @@ text: `The walk to Santa Maria di Castelvecchio is a scenic hike through the den
 
 To get to the start, take the road for Calcata from the Mazzano Romano roundabout, and turn left at the sign, about 950 metres down the road.  Follow the signs, and park a further 900 metres or so up that side road.
 
-Following paths like Sentiero 009 or Sentiero 019, the trail dips down into the lush river valley, crosses the Treja River via a suspension bridge, and ascends a steep, volcanic tuff cliffside. The route can be tackled as a short, direct climb from Calcata Vecchia or as a longer, roughly 7-kilometer loop starting from Mazzano Romano. 
+Following paths like Sentiero 009 or Sentiero 019, the trail dips down into the lush river valley, crosses the Treia River via a suspension bridge, and ascends a steep, volcanic tuff cliffside. The route can be tackled as a short, direct climb from Calcata Vecchia or as a longer, roughly 7-kilometre loop starting from Mazzano Romano. 
 
 Walking along this path offers striking, elevated views of Calcata perched on its rock spur across the canyon, though hikers should wear sturdy boots as the forest floor and volcanic rock sections can become quite muddy and slippery after rainfall.
 
@@ -259,19 +259,19 @@ It is strongly recommended to have hiking sticks, mosquito spray and mosquito ge
 
 //WALKING TOWARDS MONTE GELATO
   {
-    x: 24.7, y: 90.9,
+    x: 24.7, y: 91.2,
     icon: "Hiking left icon.svg",
     image: "Monte gelato-sketch.jpg",
     title: "Walking towards Monte Gelato",
-text: `Taking this path down the hill, you can walk to the famous waterfalls of Monte Gelato .
+text: `Taking this path down the hill, you can walk to the famous waterfalls of Monte Gelato.
 Because of its abundance of water, Monte Gelato has been frequented by man since prehistoric times.
-This area preserves traces of the many settlements that have taken place here over time: from the remains of a Roman villa of the first century BC, to the agricultural settlement of the eighth century AD, to the water mill built in 1800s which was maintained active until the 1960s.
+This area preserves traces of the many settlements that have taken place here over time: from the remains of a Roman villa of the first century BC, to the agricultural settlement of the eighth century AD, to the water mill built in the 1800s which was maintained active until the 1960s.
 The “Mola,” or water mill, was built by the Del Drago family, who in those years owned the same-name estate.`,
 image2: "Mill sketch.jpg",
-text2: `It is a complex of buildings that makes use of a pre-existing medieval constructions: a structure situated between the two branches of the Treja river, in correspondence with the famous waterfalls, perhaps already used in ancient times as a mill, and a tower located nearby, along the present-day road.
+text2: `It is a complex of buildings that makes use of pre-existing medieval constructions: a structure situated between the two branches of the Treia river, in correspondence with the famous waterfalls, perhaps already used in ancient times as a mill, and a tower located nearby, along the present-day road.
 The mill, which remained in use until after the war and was then abandoned, has been recovered only in very recent times, and houses one of the Park’s information points that with models and panels illustrates several aspects of the structure of the surrounding area.`,
 image3: "Terence hill sketch.jpg",
-text3: `Monte Gelato is also the site of many movies, famously depicted in the Spaghetti Western staring Terence Hill.
+text3: `Monte Gelato is also the site of many movies, famously depicted in the Spaghetti Western starring Terence Hill.
 `,
 link: "https://www.parchilazio.it/valledeltreja",
 },
@@ -283,14 +283,14 @@ link: "https://www.parchilazio.it/valledeltreja",
     icon: "Hiking right icon.svg",
     image: "Calcata1.jpg",
     title: "Walking towards Calcata",
-text: `Ideal for a day outing, you can walk to Calcata (approximate  1/2 hours) through the lush Treja valley, alongside the Treja river, which is a tributory to the Tiber in Rome.  In Calcata you can have lunch and walk back in the afternoon, or arrange for someone to pick you up there in a car.
+text: `Ideal for a day outing, you can walk to Calcata (approximately 1 & 1/2 hours) through the lush Treia valley, alongside the Treia river, which is a tributary to the Tiber in Rome.  In Calcata you can have lunch and walk back in the afternoon, or arrange for someone to pick you up there in a car.
 
-Walking down Via del Fontana, near the carpark, you will first encounter The Mazzano Romano Washhouse (Il Lavatoio Comunale).  It was originally constructed in the late 19th century (c. 1880s–1890s) as part of a post-unification public health push to bring clean, organized water channels to rural Lazio villages.`,
+Walking down Via del Fontana, near the carpark, you will first encounter The Mazzano Romano Washhouse (Il Lavatoio Comunale).  It was originally constructed in the late 19th century (c. 1880s–1890s) as part of a post-unification public health push to bring clean, organised water channels to rural Lazio villages.`,
 image2:"Wash house sketch.jpg",
-text2: `Built using sturdy local volcanic tufa stone, the structure underwent its most significant modern rebuilding, expansion, and roofing upgrade in the mid-1920s (c. 1925–1926) to cope with growing population demands and seasonal water shortages. It was still in use until thethe late 1970s, becoming obsolete due to the widespread adoption of domestic washing machines. It was saved from demolition and fully restored as a protected heritage site in the early 2010s.`,
+text2: `Built using sturdy local volcanic tufa stone, the structure underwent its most significant modern rebuilding, expansion, and roofing upgrade in the mid-1920s (c. 1925–1926) to cope with growing population demands and seasonal water shortages. It was still in use until the late 1970s, becoming obsolete due to the widespread adoption of domestic washing machines. It was saved from demolition and fully restored as a protected heritage site in the early 2010s.`,
 
 image3:"Narce temple sketch.jpg",
-text3: `On the 1 & 1/2 hour walk to Calcata, you will also encounter the remains of the temple remains of Narce, located at the Monte Li Santi-Le Rote sanctuary site, consist primarily of the stone foundations and wall footprints of a sacred Faliscan complex built into terraces along the Treja River. Dating from the 6th to the 2nd century BC, the visible ruins include the structural bases of two main rooms, sacrificial pits, and retaining walls, all of which are now preserved beneath modern protective roofs. While the original mudbrick walls and decorative terracotta roofs have vanished, these remaining stone footprints outline a major riverfront pilgrimage center dedicated to fertility and maternal deities.
+text3: `On the walk to Calcata you will also encounter the remains of the temple of Narce at the Monte Li Santi-Le Rote sanctuary site. They consist primarily of the stone foundations and wall footprints of a sacred Faliscan complex built into terraces along the Treia River. Dating from the 6th to the 2nd century BC, the visible ruins include the structural bases of two main rooms, sacrificial pits, and retaining walls, all of which are now preserved beneath modern protective roofs. While the original mudbrick walls and decorative terracotta roofs have vanished, these remaining stone footprints outline a major riverfront pilgrimage centre dedicated to fertility and maternal deities.
 As you approach Calcata, you will be walking through the site of the old Faliscan town of Narce, of which many excavated antiquities can be seen at the Mazzano Museum.`,
 link: "https://www.parchilazio.it/valledeltreja",
 },
@@ -298,7 +298,7 @@ link: "https://www.parchilazio.it/valledeltreja",
 
 //CASA ALBIN - IL TERRAZZO
   {
-    x: 61.9, y: 90.8,
+    x: 62.6, y: 90.8,
     icon: "Accommodation.svg",
     image: "Terrace.jpg",
     title: "Il Patio – Casa Diana and Il Terrazzo – Casa Albin",
@@ -309,17 +309,16 @@ image3: "Cooking.jpg",
 
 text3: `Il Patio – Casa Diana has a cosy bedroom in the form of an archway over the street. This suite is accessed via a small courtyard.
 
-Both apartments TV with Netflix etc, Wifi, washer/dryer, heated towel rack, hairdryer, bedside USB charging ports and both soft and firm pillows.`,
+Both apartments have a TV with Netflix etc, Wifi, washer/dryer, heated towel rack, hairdryer, bedside USB charging ports and both soft and firm pillows.`,
 image4: "Bedroom.jpg",
 
-text4: `Il Terrazzo – Casa Albin overlooks the Treja national park, with waterfalls visible and audible from the windows and terrace. Il Terrazzo has an additional mezzanine area with a sofa bed, suitable for an additional adult or older children.
-Il Terrazzo Casa Albin also has a spectacular terrace with views of both the adjoining medieval tower and the national park below.`,
+text4: `Il Terrazzo – Casa Albin overlooks the Treia national park, with waterfalls visible and audible from the windows and terrace. Il Terrazzo has an additional mezzanine area with a sofa bed, suitable for an additional adult or older children.
+Il Terrazzo – Casa Albin also has a spectacular terrace with views of both the adjoining medieval tower and the national park below.`,
 image5: "Bathroom.jpg",
 
 text5:`Public parking is available close to the entrance to the medieval village, which is not accessible to vehicles.
- Note that animals and smoking cigarettes or vapes is not permitted in either apartment, including on the terrace or patio area.
-Additional accommodation can be arranged at 2 adjoining similar accommodation facilities for between 2 and 8 people, as well as other locations in the Borgo (old part) of Mazzano.
-Make a request for accommodation ????.`,
+ Note that animals and smoking cigarettes or vapes are not permitted in either apartment, including on the terrace or patio area.
+Additional accommodation can be arranged at 2 adjoining similar accommodation facilities for between 2 and 8 people, as well as other locations in the Borgo (old part) of Mazzano.`,
 link: "https://www.airbnb.it/rooms/1599326244767097184",
 },
  //END CASA ALBIN - IL TERRAZZO BLOCK
@@ -327,14 +326,14 @@ link: "https://www.airbnb.it/rooms/1599326244767097184",
 
 //COOKING SCHOOL BLOCK
   {
-    x: 67.4, y: 86.2,
+    x: 69.4, y: 86,
     icon: "Fabiolous cooking day icon.svg",
     image: "Fabiolous.jpg",
     title: "Fabiolous cooking school",
 text: `Immediately below Casa Albin - Il Terrazzo, at Il Drago, you can experience a piece of history shopping with our chef at a typical market, handpicking fresh ingredients, meeting local merchants, and cooking together some of the recipes that mark the most authentic culinary traditions. After your hands-on lesson, you get to sip wine, enjoy our view, and indulge in your complete meal in the romantic living room or on the terrace.
 `,
 link: "https://fabiolouscookingday.com/cook-in-a-medieval-town/",
-text2: `As the standard booking arrangement involves a pickup in Rome  SOMETHING MORE HERE.`,
+text2: `Cooking, eating and relaxing - the event pretty much goes all day. As the standard booking arrangement involves a pickup in Rome, contact your hosts at Il Patio – Casa Diana and Il Terrazzo – Casa Albin who will arrange an alternative meeting point at a discounted rate.`,
 },
  //END COOKING SCHOOL BLOCK
 
