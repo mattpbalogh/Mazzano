@@ -128,6 +128,24 @@
   }
   .blurb a { color: #1a5fb4; pointer-events: auto; }
 
+  /* Small floating labels on the Mazzano picture ("West towards Bracciano" etc.), set by layerLabels
+     in Title_block.js. background:rgba(255,255,255,0.7) - the last number is how SOLID the white is
+     (1 = solid, 0.7 = 70%). Edit the clamp() numbers to change the text size. */
+  .layer-label {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    padding: 0.35em 0.7em;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.7);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    color: #2b2b1b;
+    font-family: "Trebuchet MS", "Segoe UI", Arial, sans-serif;
+    font-weight: 600;
+    font-size: clamp(9px, 1.7cqw, 19px);
+    line-height: 1.25;
+  }
+
   /* Language selector: three small flags in a corner of the base map (see SHOW_LANGUAGES below).
      To move it, change top / right (use left instead of right for the left-hand corner). */
   .langs {
@@ -768,6 +786,11 @@ function showLayer(loc) {
   const tbCfg = getTitleBlockCfg();
   const layerBlurb = makeBlurb(tbCfg && tbCfg.layerBlurb);
   if (layerBlurb) layer.appendChild(layerBlurb);
+  // the small floating labels on the Mazzano picture (layerLabels in Title_block.js)
+  const layerLabels = makeLabels(tbCfg && tbCfg.layerLabels);
+  if (layerLabels) layer.appendChild(layerLabels);
+  // the language flags are shown on top of the Mazzano picture too
+  if (SHOW_LANGUAGES) layer.appendChild(makeLanguageBox());
   buildIcons(cfg.locations || [], layer);
 
   window.addEventListener("resize", size);
@@ -831,6 +854,24 @@ function makeBlurb(b) {
   d.style.width = (b.width === undefined ? 40 : b.width) + "%";
   d.innerHTML = protect(linkify(String(b.text).trim()));
   zone.appendChild(d);
+  return zone;
+}
+
+// Small floating labels: each has x, y = centre (% of the picture), width (% of the picture) and text
+function makeLabels(list) {
+  if (!Array.isArray(list) || !list.length) return null;
+  const zone = document.createElement("div");
+  zone.className = "titlezone";
+  list.forEach(function (b) {
+    if (!b || !b.text) return;
+    const d = document.createElement("div");
+    d.className = "layer-label";
+    d.style.left = (b.x === undefined ? 50 : b.x) + "%";
+    d.style.top = (b.y === undefined ? 50 : b.y) + "%";
+    d.style.width = (b.width === undefined ? 16 : b.width) + "%";
+    d.innerHTML = protect(linkify(String(b.text).trim()));
+    zone.appendChild(d);
+  });
   return zone;
 }
 
@@ -925,9 +966,9 @@ function buildTitleBlock() {
   if (baseBlurb) map.appendChild(baseBlurb);
 }
 
-// The flags in the corner: each one reloads the site through Google Translate in that language
+// The flags in the corner (on the base map, and again on the Mazzano picture): each one reloads the site through Google Translate in that language
 // (the English flag goes back to the normal site). Works on the published website only.
-function buildLanguageSelector() {
+function makeLanguageBox() {
   const TG = ".translate.goog";
   const host = location.hostname;
   const onTranslated = host.slice(-TG.length) === TG;
@@ -966,12 +1007,12 @@ function buildLanguageSelector() {
     });
     box.appendChild(a);
   });
-  map.appendChild(box);
+  return box;
 }
 
 buildIcons(locations, map);
 buildTitleBlock();
-if (SHOW_LANGUAGES) buildLanguageSelector();
+if (SHOW_LANGUAGES) map.appendChild(makeLanguageBox());
 if (SHOW_GUIDES) buildGuides();
 </script>
 
