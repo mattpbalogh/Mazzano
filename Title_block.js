@@ -51,7 +51,7 @@ const titleBlock = {
     //                     padding = space around the words, border-radius = rounded corners.
     // The heading font is set by font-family and font-size (in the first <div ...> inside the box).
     // Keep the whole thing, from <div to the last </div>, on ONE line.
-    text: `<div style="background:rgba(255,255,255,0.7); padding:0.7em 1.1em; border-radius:8px; box-shadow:0 2px 10px rgba(0,0,0,0.3);"><div style="font-family:'Palatino Linotype','Book Antiqua',Palatino,Georgia,serif; font-style:normal; font-weight:700; font-size:1.7em; line-height:1.15; margin-bottom:0.25em;">Mazzano Romano</div>A real medieval village, not a museum piece. Here you can drink your morning coffee at the local bar, walk the valley paths, and live the way the locals do, with no tour buses in sight.</div>`
+    text: `<div style="background:rgba(255,255,255,0.85); padding:0.7em 1.1em; border-radius:8px; box-shadow:0 2px 10px rgba(0,0,0,0.3);"><div style="font-family:'Palatino Linotype','Book Antiqua',Palatino,Georgia,serif; font-style:normal; font-weight:700; font-size:1.7em; line-height:1.15; margin-bottom:0.25em;">Mazzano Romano</div>A real medieval village. Here you can drink your morning coffee at the local bar, walk the valley paths, and live the way the locals do, with no tour buses in sight.</div>`
   },
  
   // Small floating labels on the 2nd layer (Mazzano map), in the same see-through white box style.

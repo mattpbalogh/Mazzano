@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Interactive map - Mazzano Romano area</title>
+<script>
+// Is this a mobile phone? Looks at the browser's identity string and, if it says phone, marks the page
+// with the class "mobile" so the CSS below can use phone settings (.mobile ...).
+// (Tablets are treated as computers. To include them, add |iPad|Android to the list.)
+try { if (/Mobi|iPhone|iPod/i.test(navigator.userAgent)) document.documentElement.className += " mobile"; } catch (e) {}
+</script>
 <style>
   * { box-sizing: border-box; }
   body {
@@ -127,6 +133,10 @@
     text-shadow: 0 0 3px #fff, 0 0 3px #fff, 0 0 5px #fff, 1px 1px 2px #fff, -1px -1px 2px #fff, 1px -1px 2px #fff, -1px 1px 2px #fff;
   }
   .blurb a { color: #1a5fb4; pointer-events: auto; }
+  /* The text block on the Mazzano picture: same plain, easy-to-read lettering as the West / East labels
+     (the "Mazzano Romano" heading keeps its own font, set in Title_block.js). To go back to italic,
+     change font-style to italic and font-weight to 400. */
+  .layer .blurb { font-style: normal; font-weight: 600; text-shadow: none; color: #006400; }   /* color: the very dark green - change the code to try another */
 
   /* Small floating labels on the Mazzano picture ("West towards Bracciano" etc.), set by layerLabels
      in Title_block.js. background:rgba(255,255,255,0.7) - the last number is how SOLID the white is
@@ -137,7 +147,7 @@
     text-align: center;
     padding: 0.35em 0.7em;
     border-radius: 8px;
-    background: rgba(255,255,255,0.7);
+    background: rgba(255,255,255,0.70);
     box-shadow: 0 2px 10px rgba(0,0,0,0.3);
     color: #2b2b1b;
     font-family: "Trebuchet MS", "Segoe UI", Arial, sans-serif;
@@ -150,13 +160,13 @@
      To move it, change top / right (use left instead of right for the left-hand corner). */
   .langs {
     position: absolute;
-    top: 6px; right: 8px;
+    top: 6px; right: 50px;
     display: flex; gap: 6px;
     z-index: 12;
   }
   .langs a {
     display: block;
-    width: 30px; height: 20px;
+    width: 50px; height: 30px;
     border-radius: 3px;
     overflow: hidden;
     box-shadow: 0 0 0 1px rgba(0,0,0,0.35);
@@ -166,6 +176,11 @@
   .langs a:hover { opacity: 1; }
   .langs a.on { opacity: 1; box-shadow: 0 0 0 2px #fff, 0 0 0 4px #1a5fb4; }   /* the language being shown */
   .langs svg { display: block; width: 100%; height: 100%; }
+  /* On a mobile phone the page gets the class "mobile" (see the little script in the <head>),
+     so the flags are smaller. Change the sizes here. */
+  .mobile .langs { top: 4px; right: 5px; gap: 4px; }
+  .mobile .langs a { width: 20px; height: 13px; border-radius: 2px; }
+  .mobile .langs a.on { box-shadow: 0 0 0 1.5px #fff, 0 0 0 3px #1a5fb4; }
 
   /* Popup box: outer box stays put, inner part scrolls if text is long */
   .popup {
