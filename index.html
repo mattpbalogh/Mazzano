@@ -857,16 +857,29 @@ function getTitleBlockCfg() {
   try { return (typeof titleBlock !== "undefined") ? titleBlock : null; } catch (err) { return null; }
 }
 
+// On a phone, a block (or label) may have its own  mobile: { x, y, width }  in Title_block.js.
+// Any of the three it leaves out are taken from the normal x, y, width.
+function placed(b) {
+  const phone = document.documentElement.classList.contains("mobile");
+  const m = (phone && b.mobile && typeof b.mobile === "object") ? b.mobile : {};
+  return {
+    x: m.x !== undefined ? m.x : b.x,
+    y: m.y !== undefined ? m.y : b.y,
+    width: m.width !== undefined ? m.width : b.width
+  };
+}
+
 // A movable text block: x, y = centre (% of the picture), width = % of the picture
 function makeBlurb(b) {
   if (!b || !b.text) return null;
+  const pos = placed(b);
   const zone = document.createElement("div");
   zone.className = "titlezone";
   const d = document.createElement("div");
   d.className = "blurb";
-  d.style.left = (b.x === undefined ? 50 : b.x) + "%";
-  d.style.top = (b.y === undefined ? 90 : b.y) + "%";
-  d.style.width = (b.width === undefined ? 40 : b.width) + "%";
+  d.style.left = (pos.x === undefined ? 50 : pos.x) + "%";
+  d.style.top = (pos.y === undefined ? 90 : pos.y) + "%";
+  d.style.width = (pos.width === undefined ? 40 : pos.width) + "%";
   d.innerHTML = protect(linkify(String(b.text).trim()));
   zone.appendChild(d);
   return zone;
@@ -881,9 +894,10 @@ function makeLabels(list) {
     if (!b || !b.text) return;
     const d = document.createElement("div");
     d.className = "layer-label";
-    d.style.left = (b.x === undefined ? 50 : b.x) + "%";
-    d.style.top = (b.y === undefined ? 50 : b.y) + "%";
-    d.style.width = (b.width === undefined ? 16 : b.width) + "%";
+    const pos = placed(b);
+    d.style.left = (pos.x === undefined ? 50 : pos.x) + "%";
+    d.style.top = (pos.y === undefined ? 50 : pos.y) + "%";
+    d.style.width = (pos.width === undefined ? 16 : pos.width) + "%";
     d.innerHTML = protect(linkify(String(b.text).trim()));
     zone.appendChild(d);
   });
