@@ -227,9 +227,7 @@ This little shopping strip is ideal for picking up supplies while driving from t
 
 10 minutes drive or 1 hour beautiful walk from Mazzano
 
-Because of its abundance of water, Monte Gelato has been frequented by man since prehistoric times.
-
-This area preserves traces of the many settlements that have taken place here over time: from the remains of a Roman villa of the first century BC, to the agricultural settlement of the eighth century AD, to the water mill built in the 1800s which was maintained active until the 1960s.`,
+Because of its abundance of water, Monte Gelato has been frequented by man since prehistoric times. This area preserves traces of the many settlements that have taken place here over time: from the remains of a Roman villa of the first century BC, to the agricultural settlement of the eighth century AD, to the water mill built in the 1800s which was maintained active until the 1960s.`,
 
 image2:"Mill sketch.jpg",
 
@@ -254,9 +252,10 @@ Monte Gelato has also been featured in many films, including the spaghetti weste
 20 minutes drive
 
 Visitors can explore the imposing 15th-century Rocca dei Borgia once tied to Lucrezia Borgia, featuring the sweeping double-tiered arches of the 18th-century Acquedotto di Nepi and the Renaissance Palazzo Comunale designed by Antonio da Sangallo the Younger. 
-If you park in the lower car park, you can walk up the stairs through the 5 metre thick walls of the old town.  In the Borgo you will find the Cathedral of Santa Maria Assunta (Duomo di Nepi), a grand historic landmark built over a Roman forum and distinguished by an unusual, expansive layout of five parallel aisles. Though its upper basilica showcases a striking 19th-century Neoclassical design following a devastating fire set by Napoleonic troops in 1798, its true crown jewel is the surviving 12th-century Romanesque crypt, featuring a subterranean forest of 24 intricately carved columns – make sure you have some 1 euro coins for lighting.
-The ruins of the Rocca dei Borgia, or Borgia castle can be seen from outside, or visited on weekends, typically an 11:30 am opening, and an afternoon opening. That can be checked here: [Borgia Castle opening hours](https://www.museociviconepi.it/en/monuments/borgia-castle/).
 
+If you park in the lower car park, you can walk up the stairs through the 5 metre thick walls of the old town.  In the Borgo you will find the Cathedral of Santa Maria Assunta (Duomo di Nepi), a grand historic landmark built over a Roman forum and distinguished by an unusual, expansive layout of five parallel aisles. Though its upper basilica showcases a striking 19th-century Neoclassical design following a devastating fire set by Napoleonic troops in 1798, its true crown jewel is the surviving 12th-century Romanesque crypt, featuring a subterranean forest of 24 intricately carved columns – make sure you have some 1 euro coins for lighting.
+
+The ruins of the Rocca dei Borgia, or Borgia castle can be seen from outside, or visited on weekends, typically an 11:30 am opening, and an afternoon opening. That can be checked here: [Borgia Castle opening hours](https://www.museociviconepi.it/en/monuments/borgia-castle/).
 
 Nepi also has catacombs (Catacomb of St. Savinilla in Nepi), that can be visited [by pre arrangement at this site:](https://www.catacombeditalia.va/content/archeologiasacra/en/catacombs/by-provinces/lazio/catacomb-of-st-savinilla-nepi.html)`,
 
@@ -354,8 +353,7 @@ A great day trip or stop off if driving from Northern Italy is Rasiglia, a small
     title: "Sacrofano",
     text: `Sacrofano is a charming medieval commune with origins tracing back to the ancient Etruscan city of Veii. The town sits within the protected landscape of the Parco di Veio. Its historic centre features narrow cobblestone streets, defensive stone structures, the Church of San Giovanni Battista, and a rich feudal history tied to noble dynasties like the Orsini and the Chigi families. 
 
-Jewish Ghetto
-
+<b>Jewish Ghetto</b>
 In the mid-16th century, the highest part of the Castle, the Castrum, was transformed from a military apparatus into a secluded residential nucleus, the ghetto, destined for the Jewish community that had arrived from Fiumefreddo Bruzio, in the province of Cosenza (Calabria). The ghetto was accessible from a single door closed at sunset and opened again only at dawn.
 
 The racial laws sanctioned by Pope Paul IV’s encyclical Cum nimis absurdum of 1555 were reported in the Statute of Scrofano (1554) listing a series of limitations on the rights of the Jewish community and imposing their conduct. The set of regulations (chapters) eventually became the foundation of an agreement drafted between the Calabrian Jew Simone Cuscio and the Orsini family for the opening of a loan bank in Scrofano in 1543. (Ebraismo dell’Italia Meridionale Peninsulare dalle origini al 1541, Esposito, 1996).
@@ -375,13 +373,12 @@ Life in the Jewish ghetto ended in the second half of the XVIII century with the
     image: "Sutri.jpg",
     title: "Sutri",
     text: `Stunning town, packed with places to see.  The town was at the crossroads of Roman, Etruscan and Faliscan communities.
-20 minutes drive - park below the town, in a large carpark on the right.
-Below the town, on the Western side, you will see many caves carved into the rock by both Romans and Etruscans in the 4th century BC.
+20 minutes drive - park below the town, in a large carpark on the right. At that level, on the Western side, you will see many caves carved into the rock by both Romans and Etruscans in the 4th century BC.
 
-To the South West is the rock amphitheatre, part of the Roman outpost dating from around 384 BC. It is the only known amphitheatre carved entirely into rock, with no constructed segments.  While you can see the amphitheatre from the outside, entrance requires a ticket purchased from the kiosk at the gate.  It has limited entrance times, so [this site for opening details](https://www.archeoares.it/musei/sutri/anfiteatro-e-parco-archeologico/).  `,
+To the South West is the rock amphitheatre, part of the Roman outpost dating from around 384 BC. It is the only known amphitheatre carved entirely into rock, with no constructed segments.  While you can see the amphitheatre from the outside, entrance requires a ticket purchased from the kiosk at the gate.  It has limited entrance times, so [this site for opening details](https://www.archeoares.it/musei/sutri/anfiteatro-e-parco-archeologico/).`,
 image2:"Sutri 2.jpg",
 text2: `Slightly north of the amphitheatre is the stunning Mithraeum, or Church of the Madonna of the Birth, carved entirely into the rock.  Originally carved to be a place of worship to the god Mithra, who was an opponent of Christianity.  It was converted into a church in the 13th and 14th centuries, decorated with detailed frescoes.  Entrance is with a tour guide only, and set times.  Tickets are also bought from the kiosk outside the amphitheatre. There is a Sutri pass that provides entrance to both the amphitheatre and the Mithraeum.`,
-image2:"Sutri 3.jpg",
+image3:"Sutri 3.jpg",
 text3: `On the Eastern side of the main road (Via Cassia) is the steep road up to the town (resident cars only permitted), featuring picturesque alleyways and many intriguing arches.  There is also the Cathedral of Santa Maria Assunta, and the long rectangular ancient washhouse.`,
   },
 //END SUTRI BLOCK
