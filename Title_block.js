@@ -60,7 +60,9 @@ const titleBlock = {
   // text  : the words. Add or remove lines as you like.
   // (To change how solid the white is, edit  .layer-label  near the top of index.html.)
   layerLabels: [
-    { x: 13,  y: 9.5, width: 20, text: `West towards Bracciano` },
+  { x: 7, y: 9, width: 20,
+  mobile: { x: 9, y: 9, width: 20 },
+  text: `West towards Bracciano` },
     { x: 68, y: 10, width: 15, text: `East towards Calcata` }
   ],
  
