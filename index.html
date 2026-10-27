@@ -942,7 +942,8 @@ function buildTitleBlock() {
                                                    y: (cfg.y === undefined ? 4 : cfg.y) + 6, centre: true });
       showPopup(loc, a, map);
     });
-    links.appendChild(a);
+ links.appendChild(a);
+    links.appendChild(document.createTextNode(" "));   // a real space between the links, so translators keep them apart
   });
   block.appendChild(links);
 
