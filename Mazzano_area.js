@@ -379,9 +379,9 @@ Life in the Jewish ghetto ended in the second half of the XVIII century with the
 Below the town, on the Western side, you will see many caves carved into the rock by both Romans and Etruscans in the 4th century BC.
 
 To the South West is the rock amphitheatre, part of the Roman outpost dating from around 384 BC. It is the only known amphitheatre carved entirely into rock, with no constructed segments.  While you can see the amphitheatre from the outside, entrance requires a ticket purchased from the kiosk at the gate.  It has limited entrance times, so [this site for opening details](https://www.archeoares.it/musei/sutri/anfiteatro-e-parco-archeologico/).  `,
-image2:"Sutri 2.jpg",
+image2: "Sutri 2.jpg",
 text2: `Slightly north of the amphitheatre is the stunning Mithraeum, or Church of the Madonna of the Birth, carved entirely into the rock.  Originally carved to be a place of worship to the god Mithra, who was an opponent of Christianity.  It was converted into a church in the 13th and 14th centuries, decorated with detailed frescoes.  Entrance is with a tour guide only, and set times.  Tickets are also bought from the kiosk outside the amphitheatre. There is a Sutri pass that provides entrance to both the amphitheatre and the Mithraeum.`,
-image2:"Sutri 3.jpg",
+image2: "Sutri 3.jpg",
 text3: `On the Eastern side of the main road (Via Cassia) is the steep road up to the town (resident cars only permitted), featuring picturesque alleyways and many intriguing arches.  There is also the Cathedral of Santa Maria Assunta, and the long rectangular ancient washhouse.`,
   },
 //END SUTRI BLOCK
