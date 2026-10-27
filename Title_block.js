@@ -38,7 +38,7 @@ const titleBlock = {
   // width : how wide the block is, as a % of the map
 baseBlurb: {
     x: 78, y: 9, width: 40,
-    mobile: { x: 78, y: 13, width: 40 },
+    mobile: { x: 78, y: 16, width: 40 },
     text: `Wake up in a medieval borgo, shop where the locals shop, eat what they eat, and discover the Italy that the crowds never reach`
   },
  
@@ -61,8 +61,8 @@ baseBlurb: {
   // text  : the words. Add or remove lines as you like.
   // (To change how solid the white is, edit  .layer-label  near the top of index.html.)
   layerLabels: [
-  { x: 9, y: 9, width: 20,
-  mobile: { x: 9, y: 9, width: 20 },
+  { x: 11, y: 9, width: 20,
+  mobile: { x: 10, y: 9.5, width: 20 },
   text: `West towards Bracciano` },
     { x: 68, y: 10, width: 15, text: `East towards Calcata` }
   ],
