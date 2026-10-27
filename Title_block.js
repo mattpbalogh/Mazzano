@@ -62,7 +62,7 @@ baseBlurb: {
   // (To change how solid the white is, edit  .layer-label  near the top of index.html.)
   layerLabels: [
   { x: 12, y: 5, width: 20,
-  mobile: { x: 12, y: 50, width: 20 },
+  mobile: { x: 12, y: 8.8, width: 20 },
   text: `West towards Bracciano` },
     { x: 68, y: 10, width: 15, text: `East towards Calcata` }
   ],
