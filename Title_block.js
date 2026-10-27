@@ -38,7 +38,7 @@ const titleBlock = {
   // width : how wide the block is, as a % of the map
 baseBlurb: {
     x: 78, y: 10, width: 40,
-    mobile: { x: 78, y: 28, width: 40 },
+    mobile: { x: 78, y: 12, width: 40 },
     text: `Wake up in a medieval borgo, shop where the locals shop, eat what they eat, and discover the Italy that the crowds never reach`
   },
  
