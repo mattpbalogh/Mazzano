@@ -44,7 +44,7 @@ const titleBlock = {
   // Movable text block on the 2nd layer (Mazzano map). Same fields as above,
   // but x, y, width are % of the Mazzano picture.
   layerBlurb: {
-    x: 50, y: 53, width: 80,
+    x: 50, y: 54, width: 80,
     // The words sit inside a see-through white box, with "Mazzano Romano" as a heading on top.
     // To change the box:  background:rgba(255,255,255,0.7)  - the last number is how SOLID the white is
     //                     (1 = solid white, 0.7 = 70%, 0.4 = quite see-through).
