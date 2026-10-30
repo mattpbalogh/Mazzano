@@ -100,6 +100,7 @@ try { if (/Mobi|iPhone|iPod/i.test(navigator.userAgent)) document.documentElemen
     pointer-events: auto;          /* the links themselves can be clicked */
   }
   .tb-links a:hover { color: #0b3d80; }
+  .tb-link { display: inline-block; }
   .tb-hint { font-size: clamp(10px, 1.6cqw, 17px); line-height: 1.4; color: #4a4a3c; }
 
   /* "Mazzano Romano" link on the same line as Celebration / Culture / Cuisine.
@@ -604,14 +605,14 @@ function linkify(t) {
 let noTranslateRe = null;
 try {
   const esc = function (w) { return w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/['\u2019]/g, "['\u2019]"); };
-  noTranslateRe = new RegExp("(?<![\\p{L}\\p{N}])(" +
+  noTranslateRe = new RegExp("( ?)(?<![\\p{L}\\p{N}])(" +
     NO_TRANSLATE.slice().sort(function (a, b) { return b.length - a.length; }).map(esc).join("|") +
-    ")(?![\\p{L}\\p{N}])", "gu");
+    ")(?![\\p{L}\\p{N}])( ?)", "gu");
 } catch (err) { noTranslateRe = null; }   // very old browsers: the words are simply not protected
 function protect(html) {
   if (!noTranslateRe) return html;
   return String(html).split(/(<[^>]*>)/).map(function (part) {
-    return part.charAt(0) === "<" ? part : part.replace(noTranslateRe, '<span translate="no" class="notranslate">$1</span>');
+    return part.charAt(0) === "<" ? part : part.replace(noTranslateRe, '<span translate="no" class="notranslate">$1$2$3</span>');
   }).join("");
 }
 
@@ -942,8 +943,11 @@ function buildTitleBlock() {
                                                    y: (cfg.y === undefined ? 4 : cfg.y) + 6, centre: true });
       showPopup(loc, a, map);
     });
- links.appendChild(a);
-    links.appendChild(document.createTextNode(" "));   // a real space between the links, so translators keep them apart
+    const cell = document.createElement("div");   // each link in its own block, so translators keep them apart
+    cell.className = "tb-link";
+    cell.appendChild(a);
+    links.appendChild(cell);
+    links.appendChild(document.createTextNode(" "));   // a real space between the links
   });
   block.appendChild(links);
 
