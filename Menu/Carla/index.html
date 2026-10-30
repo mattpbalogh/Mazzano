@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Menù di oggi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #FFE09B;
+    --card: #FFF6DC;
+    --ink: #1a1408;
+    --soft: #6b5a32;
+    --gold: #F2C14E;
+    --green: #4F7A28;
+    --red: #B8361F;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--paper); color: var(--ink); }
+  body { font-family: 'Poppins', system-ui, sans-serif; font-size: 18px; -webkit-font-smoothing: antialiased; }
+
+  .wrap { max-width: 640px; margin: 0 auto; padding: 16px 16px 130px; }
+
+  header { position: relative; text-align: center; padding: 8px 0 4px; }
+  header svg { position: absolute; left: -24px; top: -6px; width: 120px; }
+  header h1 {
+    font-family: 'Great Vibes', cursive; font-weight: 400;
+    font-size: 3rem; margin: 18px 0 0; position: relative;
+  }
+  header p { margin: 4px 0 16px; color: var(--soft); font-size: .95rem; position: relative; }
+  header a { color: var(--ink); font-weight: 600; }
+
+  .course { background: var(--card); border-radius: 16px; padding: 12px 14px 6px; margin: 0 0 16px;
+            box-shadow: 0 1px 4px rgba(80, 60, 20, .12); }
+  .course-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 4px; }
+  .course-head h2 { margin: 0; font-size: 1.1rem; text-transform: uppercase; letter-spacing: .03em; }
+  .course-head .all { display: flex; gap: 6px; }
+  .course-head .all button {
+    font: 600 .8rem 'Poppins', sans-serif; border: 1.5px solid var(--soft); background: transparent;
+    color: var(--soft); border-radius: 999px; padding: 5px 10px; cursor: pointer;
+  }
+
+  .dish { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-top: 1px solid #efdcaa; }
+  .dish:first-of-type { border-top: 0; }
+  .dish label { display: flex; align-items: center; gap: 12px; flex: 1; cursor: pointer; min-height: 44px; }
+  .dish input[type=checkbox] {
+    appearance: none; -webkit-appearance: none; flex: none;
+    width: 34px; height: 34px; border-radius: 9px; border: 2.5px solid var(--soft);
+    background: #fff; display: grid; place-items: center; cursor: pointer; margin: 0;
+  }
+  .dish input[type=checkbox]:checked { background: var(--green); border-color: var(--green); }
+  .dish input[type=checkbox]:checked::after { content: ''; width: 10px; height: 18px; border: solid #fff;
+    border-width: 0 4px 4px 0; transform: rotate(45deg) translate(-1px, -2px); }
+  .dish .name { line-height: 1.3; }
+  .dish.off .name { color: #9b8c66; text-decoration: line-through; text-decoration-thickness: 1px; }
+
+  .price { display: flex; align-items: center; flex: none; border: 1.5px solid #d8c286; border-radius: 10px;
+           background: #fff; padding: 0 8px; height: 44px; }
+  .price span { color: var(--soft); margin-right: 2px; }
+  .price input { width: 58px; border: 0; outline: 0; font: 400 1rem 'Poppins', sans-serif; text-align: right; background: transparent; }
+  .price:focus-within { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(242, 193, 78, .4); }
+
+  .add { background: var(--card); border-radius: 16px; padding: 14px; margin: 26px 0 0; box-shadow: 0 1px 4px rgba(80, 60, 20, .12); }
+  .add h2 { margin: 0 0 10px; font-size: 1.1rem; }
+  .add .row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .add select, .add input.name {
+    font: 400 1rem 'Poppins', sans-serif; height: 48px; border-radius: 10px; border: 1.5px solid #d8c286;
+    background: #fff; padding: 0 10px; color: var(--ink);
+  }
+  .add input.name { flex: 1 1 100%; }
+  .add select { flex: 1 1 140px; }
+  .add .price { height: 48px; }
+  .add button {
+    margin-top: 12px; width: 100%; height: 50px; border: 0; border-radius: 12px; cursor: pointer;
+    font: 600 1rem 'Poppins', sans-serif; background: #fff; color: var(--ink); border: 2px solid var(--soft);
+  }
+
+  .bar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 5;
+    background: rgba(255, 240, 200, .97); box-shadow: 0 -2px 10px rgba(80, 60, 20, .18);
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  }
+  .bar .inner { max-width: 640px; margin: 0 auto; }
+  .save {
+    width: 100%; height: 58px; border: 0; border-radius: 14px; cursor: pointer;
+    font: 700 1.2rem 'Poppins', sans-serif; background: var(--red); color: #fff;
+  }
+  .save.clean { background: var(--green); }
+  .save:disabled { opacity: .75; cursor: default; }
+  .msg { text-align: center; font-size: .9rem; min-height: 1.3em; margin-top: 6px; color: var(--soft); }
+  .msg.err { color: var(--red); font-weight: 600; }
+
+  .status { text-align: center; padding: 50px 10px; color: var(--soft); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <svg viewBox="0 0 320 280" aria-hidden="true"><use href="#bouquet"/></svg>
+    <h1>Menù di oggi</h1>
+    <p>Spunta i piatti disponibili e premi <b>Salva</b>.<br><a href="../" target="_blank">Vedi il menù dei clienti →</a></p>
+  </header>
+
+  <div id="list"><div class="status">Caricamento…</div></div>
+
+  <form class="add" id="addForm" hidden>
+    <h2>Aggiungi un piatto nuovo</h2>
+    <div class="row">
+      <input class="name" id="newName" type="text" placeholder="Nome del piatto" autocomplete="off">
+      <select id="newCourse" aria-label="Portata"></select>
+      <div class="price"><span>€</span><input id="newPrice" type="text" inputmode="decimal" placeholder="0,00" aria-label="Prezzo"></div>
+    </div>
+    <button type="submit">+ Aggiungi al menù</button>
+  </form>
+</div>
+
+<div class="bar" id="bar" hidden>
+  <div class="inner">
+    <button type="button" class="save clean" id="saveBtn">Tutto salvato ✓</button>
+    <div class="msg" id="msg"></div>
+  </div>
+</div>
+
+<script src="../flowers.js"></script>
+<script src="../config.js"></script>
+<script>
+(function () {
+  const API = window.MENU_API;
+  const KEY_STORE = 'falco-admin-key';
+
+  // The key travels in the link after #k= (never stored in the website files)
+  let key = (location.hash.match(/k=([A-Za-z0-9]+)/) || [])[1] || '';
+  try {
+    if (key) localStorage.setItem(KEY_STORE, key);
+    else key = localStorage.getItem(KEY_STORE) || '';
+  } catch (e) {}
+
+  let data = null;
+  let dirty = false;
+  let busy = false;
+
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const showPrice = p => (p === null || p === undefined || p === '') ? '' : Number(p).toFixed(2).replace('.', ',');
+
+  function status(msg) { $('list').innerHTML = `<div class="status">${msg}</div>`; }
+
+  function message(text, isErr) {
+    $('msg').textContent = text || '';
+    $('msg').className = 'msg' + (isErr ? ' err' : '');
+  }
+
+  function setDirty(v) {
+    dirty = v;
+    const b = $('saveBtn');
+    b.classList.toggle('clean', !v);
+    b.textContent = v ? 'Salva le modifiche' : 'Tutto salvato ✓';
+    if (v) message('Ci sono modifiche non ancora salvate.');
+  }
+
+  function render() {
+    let html = '';
+    data.courses.forEach((c, ci) => {
+      if (!c.dishes.length) return;
+      html += `<div class="course"><div class="course-head"><h2>${esc(c.it)}</h2>
+        <div class="all"><button type="button" data-all="${ci}" data-v="1">Tutti</button>
+        <button type="button" data-all="${ci}" data-v="0">Nessuno</button></div></div>`;
+      c.dishes.forEach(d => {
+        html += `<div class="dish${d.on ? '' : ' off'}" data-id="${esc(d.id)}" data-course="${ci}">
+          <label><input type="checkbox"${d.on ? ' checked' : ''}><span class="name">${esc(d.it)}</span></label>
+          <div class="price"><span>€</span><input type="text" inputmode="decimal" value="${showPrice(d.price)}" aria-label="Prezzo ${esc(d.it)}"></div>
+        </div>`;
+      });
+      html += `</div>`;
+    });
+    $('list').innerHTML = html || '<div class="status">Nessun piatto nella lista.</div>';
+
+    $('newCourse').innerHTML = data.courses.map(c => `<option>${esc(c.it)}</option>`).join('');
+    $('addForm').hidden = false;
+    $('bar').hidden = false;
+  }
+
+  function collect() {
+    return Array.from(document.querySelectorAll('.dish[data-id]')).map(el => ({
+      id: el.dataset.id,
+      on: el.querySelector('input[type=checkbox]').checked,
+      price: el.querySelector('.price input').value.trim()
+    }));
+  }
+
+  function send(payload, doneText) {
+    if (busy) return Promise.resolve();
+    busy = true;
+    $('saveBtn').disabled = true;
+    $('saveBtn').textContent = 'Salvataggio…';
+    message('');
+    return fetch(API, { method: 'POST', body: JSON.stringify(Object.assign({ key }, payload)) })
+      .then(r => r.json())
+      .then(d => {
+        if (!d.ok) throw new Error(d.error === 'key' ? 'Link non valido.' : d.error);
+        data = d;
+        render();
+        setDirty(false);
+        message(doneText);
+        return true;
+      })
+      .catch(err => {
+        setDirty(true);
+        message('Non salvato: ' + (err.message === 'Failed to fetch' ? 'controlla la connessione e riprova.' : err.message), true);
+        return false;
+      })
+      .finally(() => { busy = false; $('saveBtn').disabled = false; });
+  }
+
+  // Events
+  $('list').addEventListener('change', e => {
+    const row = e.target.closest('.dish');
+    if (row && e.target.type === 'checkbox') row.classList.toggle('off', !e.target.checked);
+    setDirty(true);
+  });
+  $('list').addEventListener('input', () => setDirty(true));
+  $('list').addEventListener('click', e => {
+    const b = e.target.closest('button[data-all]');
+    if (!b) return;
+    document.querySelectorAll(`.dish[data-course="${b.dataset.all}"]`).forEach(row => {
+      const cb = row.querySelector('input[type=checkbox]');
+      cb.checked = b.dataset.v === '1';
+      row.classList.toggle('off', !cb.checked);
+    });
+    setDirty(true);
+  });
+
+  $('saveBtn').addEventListener('click', () => {
+    if (!dirty) { message('Il menù è già aggiornato.'); return; }
+    send({ items: collect() }, 'Salvato! Il menù dei clienti è aggiornato.');
+  });
+
+  $('addForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const name = $('newName').value.trim();
+    if (!name) { $('newName').focus(); message('Scrivi il nome del piatto.', true); return; }
+    // Save any pending ticks at the same time, so nothing is lost
+    send({ items: collect(), dish: { it: name, course: $('newCourse').value, price: $('newPrice').value.trim() } },
+         '“' + name + '” aggiunto e già spuntato nel menù.')
+      .then(ok => { if (ok) { $('newName').value = ''; $('newPrice').value = ''; } });
+  });
+
+  window.addEventListener('beforeunload', e => { if (dirty) { e.preventDefault(); e.returnValue = ''; } });
+
+  // Start
+  if (!key) { status('Questo link non è completo.<br>Chiedi a Matt il link giusto.'); return; }
+  fetch(API + '?admin=1&k=' + encodeURIComponent(key), { cache: 'no-store' })
+    .then(r => r.json())
+    .then(d => {
+      if (!d.ok) { status(d.error === 'key' ? 'Questo link non è valido.<br>Chiedi a Matt il link giusto.' : 'Errore: ' + esc(d.error)); return; }
+      data = d;
+      render();
+    })
+    .catch(() => status('Impossibile caricare il menù.<br>Controlla la connessione e ricarica la pagina.'));
+})();
+</script>
+</body>
+</html>

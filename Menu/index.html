@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Menù del Falco · Mazzano Romano</title>
+<meta name="description" content="Il menù di oggi — Today's menu">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #FFE09B;
+    --ink: #111111;
+    --soft: #5c4a24;
+    --pw: 78px;            /* price column width */
+  }
+  * { box-sizing: border-box; }
+  html { background: var(--paper); }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Poppins', system-ui, sans-serif;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    position: relative;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 28px 28px 48px;
+    overflow: hidden;
+  }
+
+  /* Language switch */
+  .lang {
+    position: fixed; top: 12px; right: 12px; z-index: 10;
+    display: flex; gap: 4px; padding: 4px;
+    background: rgba(255, 248, 225, .92);
+    border-radius: 999px;
+    box-shadow: 0 1px 6px rgba(80, 60, 20, .18);
+  }
+  .lang button {
+    display: flex; align-items: center; gap: 6px;
+    border: 0; background: transparent; cursor: pointer;
+    font: 600 13px/1 'Poppins', sans-serif; color: var(--ink);
+    padding: 6px 10px; border-radius: 999px;
+  }
+  .lang button[aria-pressed="true"] { background: #F2C14E; }
+  .lang svg { width: 20px; height: 13px; border-radius: 2px; box-shadow: 0 0 0 1px rgba(0,0,0,.12); }
+
+  h1 {
+    font-family: 'Great Vibes', cursive;
+    font-weight: 400;
+    text-align: center;
+    font-size: clamp(3.2rem, 11vw, 5.6rem);
+    line-height: 1.05;
+    margin: 6px 0 18px;
+    position: relative; z-index: 2;
+  }
+
+  .bouquet { position: absolute; z-index: 1; pointer-events: none; }
+  .bouquet.top  { width: 290px; top: 92px;  left: -18px; }
+  .bouquet.side { width: 280px; left: -40px; top: -40px; }
+
+  section { position: relative; margin: 0 0 30px; }
+  h2 {
+    position: relative; z-index: 2;
+    text-align: center;
+    font-weight: 700;
+    font-size: 1.15rem;
+    letter-spacing: .02em;
+    text-transform: uppercase;
+    margin: 0 0 10px;
+  }
+  .dish {
+    position: relative; z-index: 2;
+    display: grid;
+    grid-template-columns: var(--pw) 1fr var(--pw);
+    align-items: baseline;
+    padding: 3px 0;
+  }
+  .dish .name {
+    grid-column: 2;
+    text-align: center;
+    font-size: 1.08rem;
+    letter-spacing: .05em;
+    line-height: 1.35;
+  }
+  .dish .note {
+    display: block;
+    font-size: .72rem;
+    letter-spacing: .01em;
+    margin-top: 2px;
+  }
+  .dish .note b { font-weight: 400; text-transform: uppercase; }
+  .dish .price {
+    grid-column: 3;
+    text-align: right;
+    font-size: 1.05rem;
+    white-space: nowrap;
+  }
+
+  footer.coperto {
+    position: relative; z-index: 2;
+    text-align: center;
+    margin-top: 40px;
+    font-size: 1.02rem;
+  }
+  footer.coperto b { font-weight: 700; text-transform: uppercase; }
+  .updated {
+    text-align: center;
+    font-size: .74rem;
+    color: var(--soft);
+    margin-top: 18px;
+    font-weight: 300;
+  }
+
+  .status {
+    text-align: center; padding: 60px 0; color: var(--soft);
+    position: relative; z-index: 2;
+  }
+  .status button {
+    margin-top: 14px; font: 600 14px 'Poppins', sans-serif;
+    border: 0; border-radius: 999px; padding: 10px 18px; background: #F2C14E; cursor: pointer;
+  }
+
+  /* Phones: smaller flowers tucked in the corners, tighter price column */
+  @media (max-width: 680px) {
+    :root { --pw: 58px; }
+    .page { padding: 20px 16px 40px; }
+    h1 { margin-top: 64px; }
+    .bouquet.top { width: 104px; top: 2px; left: -14px; }
+    .bouquet.side { display: none; }
+    .bouquet.bottom { display: block; }
+    .dish .name { font-size: .98rem; letter-spacing: .03em; }
+    .dish .price { font-size: .95rem; }
+  }
+  .bouquet.bottom {
+    display: none; position: relative; width: 170px; margin: 26px auto 0; transform: scaleX(-1);
+  }
+</style>
+</head>
+<body>
+
+<div class="lang" role="group" aria-label="Lingua / Language">
+  <button type="button" data-lang="it" aria-pressed="true" title="Italiano">
+    <svg viewBox="0 0 3 2"><rect width="1" height="2" fill="#009246"/><rect x="1" width="1" height="2" fill="#fff"/><rect x="2" width="1" height="2" fill="#CE2B37"/></svg>IT
+  </button>
+  <button type="button" data-lang="en" aria-pressed="false" title="English">
+    <svg viewBox="0 0 60 30"><clipPath id="uk-s"><path d="M0,0v30h60V0z"/></clipPath><clipPath id="uk-t"><path d="M30,15h30v15zv15H0zH0V0zV0h30z"/></clipPath><g clip-path="url(#uk-s)"><path d="M0,0v30h60V0z" fill="#012169"/><path d="M0,0L60,30M60,0L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0L60,30M60,0L0,30" clip-path="url(#uk-t)" stroke="#C8102E" stroke-width="4"/><path d="M30,0v30M0,15h60" stroke="#fff" stroke-width="10"/><path d="M30,0v30M0,15h60" stroke="#C8102E" stroke-width="6"/></g></svg>EN
+  </button>
+</div>
+
+<main class="page">
+  <svg class="bouquet top" viewBox="0 0 320 280" aria-hidden="true"><use href="#bouquet"/></svg>
+  <h1 id="title">Menù del Falco</h1>
+  <div id="menu"><div class="status" id="status">Caricamento del menù…</div></div>
+  <svg class="bouquet bottom" viewBox="0 0 320 280" aria-hidden="true"><use href="#bouquet"/></svg>
+</main>
+
+<script src="flowers.js"></script>
+<script src="config.js"></script>
+<script>
+(function () {
+  const API = window.MENU_API;
+  const CACHE_KEY = 'falco-menu-v1';
+  const LANG_KEY = 'falco-lang';
+
+  const TEXT = {
+    it: { loading: 'Caricamento del menù…', error: 'Il menù non è disponibile in questo momento.', retry: 'Riprova',
+          updated: 'Aggiornato il', empty: 'Il menù di oggi sarà pubblicato a breve.' },
+    en: { loading: 'Loading the menu…', error: 'The menu is not available right now.', retry: 'Try again',
+          updated: 'Updated', empty: "Today's menu will be up shortly." }
+  };
+
+  let data = null;
+  let lang = startLang();
+
+  function startLang() {
+    const q = new URLSearchParams(location.search).get('lang');
+    if (q === 'it' || q === 'en') return q;
+    try { const s = localStorage.getItem(LANG_KEY); if (s === 'it' || s === 'en') return s; } catch (e) {}
+    return (navigator.language || 'it').toLowerCase().startsWith('it') ? 'it' : 'en';
+  }
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, c =>
+      ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+  const pick = (it, en) => (lang === 'en' && en) ? en : it;
+  const money = p => (p === null || p === undefined || p === '') ? '' : '€' + Number(p).toFixed(2);
+
+  function setLang(l) {
+    lang = l;
+    try { localStorage.setItem(LANG_KEY, l); } catch (e) {}
+    document.documentElement.lang = l;
+    document.querySelectorAll('.lang button').forEach(b =>
+      b.setAttribute('aria-pressed', String(b.dataset.lang === l)));
+    if (data) render(); else showStatus(TEXT[lang].loading);
+  }
+
+  function showStatus(msg, retry) {
+    document.getElementById('menu').innerHTML =
+      `<div class="status">${esc(msg)}${retry ? `<br><button type="button" id="retry">${esc(TEXT[lang].retry)}</button>` : ''}</div>`;
+    if (retry) document.getElementById('retry').onclick = () => { showStatus(TEXT[lang].loading); load(); };
+  }
+
+  function render() {
+    document.getElementById('title').textContent = data.title || 'Menù del Falco';
+    document.title = (data.title || 'Menù del Falco') + ' · Mazzano Romano';
+
+    const courses = (data.courses || []).filter(c => c.dishes && c.dishes.length);
+    if (!courses.length) { showStatus(TEXT[lang].empty); return; }
+
+    let html = '';
+    courses.forEach((c, i) => {
+      html += `<section>`;
+      // second bouquet sits beside the 4th course on wide screens, as on the paper menu
+      if (i === Math.min(3, courses.length - 1) && courses.length > 2) {
+        html += `<svg class="bouquet side" viewBox="0 0 320 280" aria-hidden="true"><use href="#bouquet"/></svg>`;
+      }
+      html += `<h2>${esc(pick(c.it, c.en))}</h2>`;
+      c.dishes.forEach(d => {
+        const note = pick(d.noteIt, d.noteEn);
+        html += `<div class="dish"><span class="name">${esc(pick(d.it, d.en))}` +
+                (note ? `<span class="note">${formatNote(note)}</span>` : '') +
+                `</span><span class="price">${money(d.price)}</span></div>`;
+      });
+      html += `</section>`;
+    });
+
+    const cop = data.coperto || {};
+    if (cop.price !== null && cop.price !== undefined && (cop.it || cop.en)) {
+      html += `<footer class="coperto"><b>${esc(pick(cop.it, cop.en))}</b> ${money(cop.price)}</footer>`;
+    }
+    if (data.updated) {
+      const d = new Date(data.updated);
+      if (!isNaN(d)) {
+        html += `<div class="updated">${esc(TEXT[lang].updated)} ${d.toLocaleDateString(lang === 'it' ? 'it-IT' : 'en-GB', { day: 'numeric', month: 'long' })}</div>`;
+      }
+    }
+    document.getElementById('menu').innerHTML = html;
+  }
+
+  // "Gusti: cioccolato, …" → small-caps label like the paper menu
+  function formatNote(n) {
+    const m = String(n).match(/^([^:]{1,20}):\s*(.*)$/);
+    return m ? `<b>${esc(m[1])}:</b> ${esc(m[2])}` : esc(n);
+  }
+
+  function load() {
+    fetch(API, { cache: 'no-store' })
+      .then(r => r.json())
+      .then(d => {
+        if (!d || !d.ok) throw new Error(d && d.error || 'bad response');
+        data = d;
+        try { localStorage.setItem(CACHE_KEY, JSON.stringify(d)); } catch (e) {}
+        render();
+      })
+      .catch(() => { if (!data) showStatus(TEXT[lang].error, true); });
+  }
+
+  document.querySelectorAll('.lang button').forEach(b => b.addEventListener('click', () => setLang(b.dataset.lang)));
+
+  // Show the last menu instantly (if this phone has seen it before), then refresh
+  try { const c = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null'); if (c && c.ok) data = c; } catch (e) {}
+  setLang(lang);
+  load();
+})();
+</script>
+</body>
+</html>
