@@ -141,6 +141,23 @@
   .bouquet.bottom {
     display: none; position: relative; width: 170px; margin: 26px auto 0; transform: scaleX(-1);
   }
+
+  /* Link to the area map site */
+  .maplink {
+    position: relative; z-index: 2;
+    display: flex; justify-content: center;
+    margin-top: 28px;
+  }
+  .maplink a {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 14px; min-height: 44px;
+    color: var(--ink); text-decoration: none;
+    font-size: .85rem; font-weight: 400;
+    border-radius: 999px;
+    background: rgba(255, 248, 225, .7);
+  }
+  .maplink a:hover { background: rgba(255, 248, 225, 1); }
+  .maplink svg { width: 22px; height: 22px; flex: none; }
 </style>
 </head>
 <body>
@@ -159,6 +176,17 @@
   <h1 id="title">Menù del Falco</h1>
   <div id="menu"><div class="status" id="status">Caricamento del menù…</div></div>
   <svg class="bouquet bottom" viewBox="0 0 320 280" aria-hidden="true"><use href="#bouquet"/></svg>
+  <div class="maplink">
+    <a href="https://www.mazzanoromano.net/">
+      <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="#1a1408" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round">
+        <path d="M3 6.5 9 4l6 2.5L21 4v13.5L15 20l-6-2.5L3 20z" fill="#F7E3A6"/>
+        <path d="M9 4v13.5M15 6.5V20"/>
+        <path d="M12 8.2c-1.6 0-2.8 1.2-2.8 2.7 0 2 2.8 4.6 2.8 4.6s2.8-2.6 2.8-4.6c0-1.5-1.2-2.7-2.8-2.7z" fill="#D2502E" stroke="#7C2414" stroke-width="1.2"/>
+        <circle cx="12" cy="10.9" r=".9" fill="#FFE09B" stroke="none"/>
+      </svg>
+      <span id="maptext">Scopri Mazzano Romano e dintorni</span>
+    </a>
+  </div>
 </main>
 
 <script src="flowers.js"></script>
@@ -171,9 +199,11 @@
 
   const TEXT = {
     it: { loading: 'Caricamento del menù…', error: 'Il menù non è disponibile in questo momento.', retry: 'Riprova',
-          updated: 'Aggiornato il', empty: 'Il menù di oggi sarà pubblicato a breve.' },
+          updated: 'Aggiornato il', empty: 'Il menù di oggi sarà pubblicato a breve.',
+          map: 'Scopri Mazzano Romano e dintorni' },
     en: { loading: 'Loading the menu…', error: 'The menu is not available right now.', retry: 'Try again',
-          updated: 'Updated', empty: "Today's menu will be up shortly." }
+          updated: 'Updated', empty: "Today's menu will be up shortly.",
+          map: 'Explore Mazzano Romano and the area' }
   };
 
   let data = null;
@@ -199,6 +229,7 @@
     document.documentElement.lang = l;
     document.querySelectorAll('.lang button').forEach(b =>
       b.setAttribute('aria-pressed', String(b.dataset.lang === l)));
+    document.getElementById('maptext').textContent = TEXT[lang].map;
     if (data) render(); else showStatus(TEXT[lang].loading);
   }
 
