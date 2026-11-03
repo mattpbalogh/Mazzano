@@ -266,6 +266,9 @@
         render();
         setDirty(false);
         message(doneText);
+        // Reload the page fresh from the Sheet, then show the message again
+        try { sessionStorage.setItem('falco-saved-msg', doneText); } catch (e) {}
+        setTimeout(() => location.reload(), 900);
         return true;
       })
       .catch(err => {
@@ -319,6 +322,11 @@
       if (!d.ok) { status(d.error === 'key' ? 'Questo link non è valido.<br>Chiedi a Matt il link giusto.' : 'Errore: ' + esc(d.error)); return; }
       data = d;
       render();
+      // Just saved? Show the confirmation after the refresh
+      try {
+        const m = sessionStorage.getItem('falco-saved-msg');
+        if (m) { message(m + ' ✓'); sessionStorage.removeItem('falco-saved-msg'); }
+      } catch (e) {}
     })
     .catch(() => status('Impossibile caricare il menù.<br>Controlla la connessione e ricarica la pagina.'));
 })();
