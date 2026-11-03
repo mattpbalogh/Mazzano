@@ -152,10 +152,10 @@
   /* ───────────── themes ───────────── */
 
   const THEMES = {
-    1: { name: 'Bouquet',    paper: '#FFE09B', edges: {} },
-    2: { name: 'Ghirlanda',  paper: '#FFE6A8', edges: { left: VINE, right: VINE } },
-    3: { name: 'Prato',      paper: '#FFE09B', edges: { top: BLOSSOM, bottom: MEADOW } },
-    4: { name: 'Margherite', paper: '#FFEBBA', edges: { top: DAISIES, right: DAISIES, bottom: DAISIES, left: DAISIES } }
+    1: { name: 'Bouquet',    paper: '#FFE09B', edges: {} },                                   // butter yellow (as the Canva menu)
+    2: { name: 'Ghirlanda',  paper: '#FBDCC4', edges: { left: VINE, right: VINE } },          // soft peach
+    3: { name: 'Prato',      paper: '#E4EBC6', edges: { top: BLOSSOM, bottom: MEADOW } },     // pale sage green
+    4: { name: 'Margherite', paper: '#DCE8EF', edges: { top: DAISIES, right: DAISIES, bottom: DAISIES, left: DAISIES } } // soft sky blue
   };
 
   function paint(el, n, opts) {
