@@ -19,6 +19,8 @@
   html { background: var(--paper); }
   body {
     margin: 0;
+    position: relative;
+    min-height: 100vh;
     background: var(--paper);
     color: var(--ink);
     font-family: 'Poppins', system-ui, sans-serif;
@@ -30,9 +32,13 @@
     position: relative;
     max-width: 900px;
     margin: 0 auto;
-    padding: 28px 28px 48px;
+    padding: calc(28px + var(--ft, 0px)) calc(28px + var(--fr, 0px)) calc(48px + var(--fb, 0px)) calc(28px + var(--fl, 0px));
     overflow: hidden;
   }
+
+  /* Floral edges for backgrounds 2–4 (drawn by flowers.js) */
+  .frame { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+  body.edged .bouquet { display: none !important; }
 
   /* Language switch */
   .lang {
@@ -130,11 +136,12 @@
   /* Phones: smaller flowers tucked in the corners, tighter price column */
   @media (max-width: 680px) {
     :root { --pw: 58px; }
-    .page { padding: 20px 16px 40px; }
+    .page { padding: calc(20px + var(--ft, 0px)) calc(12px + var(--fr, 0px)) calc(40px + var(--fb, 0px)) calc(12px + var(--fl, 0px)); }
     h1 { margin-top: 64px; }
     .bouquet.top { width: 104px; top: 2px; left: -14px; }
     .bouquet.side { display: none; }
-    .bouquet.bottom { display: block; }
+    .page .bouquet.bottom { display: block; }
+    body.edged h1 { font-size: 2.9rem; margin-top: 48px; }
     .dish .name { font-size: .98rem; letter-spacing: .03em; }
     .dish .price { font-size: .95rem; }
   }
@@ -161,6 +168,8 @@
 </style>
 </head>
 <body>
+
+<div class="frame" id="frame" aria-hidden="true"></div>
 
 <div class="lang" role="group" aria-label="Lingua / Language">
   <button type="button" data-lang="it" aria-pressed="true" title="Italiano">
@@ -239,7 +248,31 @@
     if (retry) document.getElementById('retry').onclick = () => { showStatus(TEXT[lang].loading); load(); };
   }
 
+  // Background chosen by Carla (1–4)
+  let theme = 0;
+  function applyTheme(n, force) {
+    n = [1, 2, 3, 4].includes(+n) ? +n : 1;
+    if (n === theme && !force) return;
+    theme = n;
+    const T = window.FalcoThemes;
+    if (!T) return;
+    const root = document.documentElement.style;
+    root.setProperty('--paper', T.get(n).paper);
+    const e = T.paint(document.getElementById('frame'), n, { scale: innerWidth < 680 ? 0.6 : 1 });
+    root.setProperty('--ft', e.top + 'px');
+    root.setProperty('--fr', e.right + 'px');
+    root.setProperty('--fb', e.bottom + 'px');
+    root.setProperty('--fl', e.left + 'px');
+    document.body.classList.toggle('edged', n !== 1);
+  }
+  let resizeTimer;
+  addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => applyTheme(theme, true), 200);
+  });
+
   function render() {
+    applyTheme(data.background);
     document.getElementById('title').textContent = data.title || 'Menù del Falco';
     document.title = (data.title || 'Menù del Falco') + ' · Mazzano Romano';
 
