@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>Menù di oggi </title>
+<title>Menù di oggi</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
@@ -78,6 +78,22 @@
     font: 600 1rem 'Poppins', sans-serif; background: #fff; color: var(--ink); border: 2px solid var(--soft);
   }
 
+  .bg { background: var(--card); border-radius: 16px; padding: 14px; margin: 26px 0 0; box-shadow: 0 1px 4px rgba(80, 60, 20, .12); }
+  .bg h2 { margin: 0 0 10px; font-size: 1.1rem; }
+  .bg .opts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+  .bg button {
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    border: 2.5px solid transparent; border-radius: 12px; background: transparent;
+    padding: 6px 2px; cursor: pointer; font: 400 .8rem 'Poppins', sans-serif; color: var(--ink);
+  }
+  .bg button[aria-pressed="true"] { border-color: var(--green); background: #fff; font-weight: 600; }
+  .bg .mini {
+    position: relative; overflow: hidden; width: 64px; height: 90px; border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(80, 60, 20, .3);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px;
+  }
+  .bg .mini i { display: block; height: 3px; border-radius: 2px; background: rgba(26, 20, 8, .45); position: relative; }
+
   .bar {
     position: fixed; left: 0; right: 0; bottom: 0; z-index: 5;
     background: rgba(255, 240, 200, .97); box-shadow: 0 -2px 10px rgba(80, 60, 20, .18);
@@ -105,6 +121,11 @@
   </header>
 
   <div id="list"><div class="status">Caricamento…</div></div>
+
+  <div class="bg" id="bgBox" hidden>
+    <h2>Sfondo del menù</h2>
+    <div class="opts" id="bgOpts" role="group" aria-label="Sfondo del menù"></div>
+  </div>
 
   <form class="add" id="addForm" hidden>
     <h2>Aggiungi un piatto nuovo</h2>
@@ -141,6 +162,7 @@
   let data = null;
   let dirty = false;
   let busy = false;
+  let background = 1;
 
   const $ = id => document.getElementById(id);
   const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c =>
@@ -182,6 +204,41 @@
     $('newCourse').innerHTML = data.courses.map(c => `<option>${esc(c.it)}</option>`).join('');
     $('addForm').hidden = false;
     $('bar').hidden = false;
+
+    background = [1, 2, 3, 4].includes(+data.background) ? +data.background : 1;
+    renderBackgrounds();
+  }
+
+  // Four little previews of the customer menu backgrounds
+  function renderBackgrounds() {
+    const T = window.FalcoThemes;
+    if (!T) return;
+    const box = $('bgOpts');
+    if (!box.children.length) {
+      T.list.forEach(t => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.dataset.bg = t.n;
+        b.innerHTML = `<span class="mini" style="background:${t.paper}">
+            <i style="width:30px"></i><i style="width:22px"></i><i style="width:26px"></i><i style="width:18px"></i>
+          </span>${esc(t.name)}`;
+        T.paint(b.querySelector('.mini'), t.n, { scale: 0.3, bouquets: true });
+        b.addEventListener('click', () => {
+          if (background === t.n) return;
+          background = t.n;
+          markBackground();
+          setDirty(true);
+        });
+        box.appendChild(b);
+      });
+    }
+    markBackground();
+    $('bgBox').hidden = false;
+  }
+
+  function markBackground() {
+    document.querySelectorAll('#bgOpts button').forEach(b =>
+      b.setAttribute('aria-pressed', String(+b.dataset.bg === background)));
   }
 
   function collect() {
@@ -236,7 +293,7 @@
 
   $('saveBtn').addEventListener('click', () => {
     if (!dirty) { message('Il menù è già aggiornato.'); return; }
-    send({ items: collect() }, 'Salvato! Il menù dei clienti è aggiornato.');
+    send({ items: collect(), background: background }, 'Salvato! Il menù dei clienti è aggiornato.');
   });
 
   $('addForm').addEventListener('submit', e => {
@@ -244,7 +301,7 @@
     const name = $('newName').value.trim();
     if (!name) { $('newName').focus(); message('Scrivi il nome del piatto.', true); return; }
     // Save any pending ticks at the same time, so nothing is lost
-    send({ items: collect(), dish: { it: name, course: $('newCourse').value, price: $('newPrice').value.trim() } },
+    send({ items: collect(), background: background, dish: { it: name, course: $('newCourse').value, price: $('newPrice').value.trim() } },
          '“' + name + '” aggiunto e già spuntato nel menù.')
       .then(ok => { if (ok) { $('newName').value = ''; $('newPrice').value = ''; } });
   });
