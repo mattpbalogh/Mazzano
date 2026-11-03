@@ -19,7 +19,7 @@
     --red: #B8361F;
   }
   * { box-sizing: border-box; }
-  html, body { margin: 0; background: var(--paper); color: var(--ink); }
+  html, body { margin: 0; background: var(--paper); color: var(--ink); transition: background-color .4s ease; }
   body { font-family: 'Poppins', system-ui, sans-serif; font-size: 18px; -webkit-font-smoothing: antialiased; }
 
   .wrap { max-width: 640px; margin: 0 auto; padding: 16px 16px 130px; }
@@ -240,6 +240,8 @@
   function markBackground() {
     document.querySelectorAll('#bgOpts button').forEach(b =>
       b.setAttribute('aria-pressed', String(+b.dataset.bg === background)));
+    // Carla's page takes on the chosen background colour, so she can see her choice
+    if (window.FalcoThemes) document.documentElement.style.setProperty('--paper', FalcoThemes.get(background).paper);
   }
 
   function collect() {
