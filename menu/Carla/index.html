@@ -153,8 +153,10 @@
   const API = window.MENU_API;
   const KEY_STORE = 'falco-admin-key';
 
-  // The key travels in the link after #k= (never stored in the website files)
-  let key = (location.hash.match(/k=([A-Za-z0-9]+)/) || [])[1] || '';
+  // The key travels in the link, after #k= or ?k= (never stored in the website files).
+  // ?k= is safer for WhatsApp/SMS, which sometimes cut links off at the #.
+  let key = (location.hash.match(/k=([A-Za-z0-9]+)/) || [])[1] ||
+            ((new URLSearchParams(location.search).get('k') || '').match(/^[A-Za-z0-9]+$/) || [])[0] || '';
   try {
     if (key) localStorage.setItem(KEY_STORE, key);
     else key = localStorage.getItem(KEY_STORE) || '';
