@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Interactive map - Mazzano Romano area</title>
+<script>
+// Is this a mobile phone? Looks at the browser's identity string and, if it says phone, marks the page
+// with the class "mobile" so the CSS below can use phone settings (.mobile ...).
+// (Tablets are treated as computers. To include them, add |iPad|Android to the list.)
+try { if (/Mobi|iPhone|iPod/i.test(navigator.userAgent)) document.documentElement.className += " mobile"; } catch (e) {}
+
+// Is it a SMALL phone (an iPhone 6/7/8/SE or older)? These have a physical screen whose longer side is
+// about 740 pixels or less; every phone from the iPhone X onwards is 800+. If so the page also gets the
+// class "small", so the CSS below can use .small settings. To change what counts as small, change 740.
+// (The screen size is used, not the window size, because the window changes as the browser's toolbars move.)
+try {
+  if (/Mobi|iPhone|iPod/i.test(navigator.userAgent) && Math.max(screen.width, screen.height) <= 740)
+    document.documentElement.className += " small";
+} catch (e) {}
+
+// Checking tool: add  #debug  to the end of the web address and a black strip appears at the bottom of the
+// screen showing what the page has decided about the device. Without #debug nothing is shown.
+try {
+  if (location.hash === "#debug") document.addEventListener("DOMContentLoaded", function () {
+    const d = document.createElement("div");
+    d.style.cssText = "position:fixed;left:0;right:0;bottom:0;z-index:99999;background:#000;color:#0f0;font:12px/1.3 monospace;padding:6px 8px;";
+    d.textContent = "classes: [" + document.documentElement.className.trim() + "]  screen " + screen.width + "x" + screen.height +
+                    "  window " + window.innerWidth + "x" + window.innerHeight + "  new-version: yes";
+    document.body.appendChild(d);
+  });
+} catch (e) {}
+</script>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 0;                 /* page margin around the map: 0 = none (use e.g. 20px to put a border back) */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    background: #f4f1ea;
+  }
+
+
+  /* Warning shown if a locations file is missing or has a typo */
+  .problem {
+    max-width: 1050px;
+    margin: 0 auto 10px;
+    padding: 8px 12px;
+    background: #fde8e8;
+    border: 1px solid #d33;
+    border-radius: 6px;
+    color: #7a1212;
+    font-size: 14px;
+  }
+
+  /* The map container: everything is positioned relative to this */
+  /* MAP SIZE: max-width is how wide the map can get on a big screen (was 1000px; 1050px = 5% larger) */
+  .map {
+    position: relative;
+    max-width: 1050px;
+    margin: 0 auto;
+  }
+  .map > img.base {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* Icons: positioned by percentage, centred on the point */
+  .icon {
+    position: absolute;
+    /* Icon size: shrinks and grows WITH the map, so each icon always covers the
+       same part of the picture. The three numbers are: smallest, % of the map's
+       width, largest. Edit them to resize all icons. */
+    width: clamp(20px, 4.4%, 46px);
+    aspect-ratio: 1 / 1;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    transition: transform 0.15s ease;
+  }
+  .icon:hover { transform: translate(-50%, -50%) scale(1.12); }
+  /* Icons on the BASE map are partly see-through (set AREA_ICON_OPACITY in the settings below),
+     so they hide less of the map; they turn solid when the pointer is over them.
+     Icons on the Mazzano picture are not affected. */
+  .map > .icon {
+    opacity: var(--area-icon-opacity, 1);
+    transition: transform 0.15s ease, opacity 0.15s ease;
+  }
+  .map > .icon:hover { opacity: 1; }
+  .icon img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+  /* Title block on the base map ("Around Mazzano Romano" + three links + hint).
+     Its position and wording are set in Title_block.js. All the text sizes scale with
+     the map; the first number in each clamp() is the smallest size (phones), the
+     last is the largest. Edit them to make a line bigger or smaller. */
+  .titlezone {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;          /* clicks pass through to the map, except on the links */
+    container-type: inline-size;   /* lets the text sizes follow the map's width (cqw units) */
+    z-index: 10;
+  }
+  .titleblock {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    white-space: nowrap;
+    color: #2b2b1b;
+    font-family: "Trebuchet MS", "Segoe UI", Arial, sans-serif;
+    /* white outline so the words stay readable over the map */
+    text-shadow: 0 0 3px #fff, 0 0 3px #fff, 0 0 5px #fff, 1px 1px 2px #fff, -1px -1px 2px #fff, 1px -1px 2px #fff, -1px 1px 2px #fff;
+  }
+  .tb-title { font-weight: 700; font-size: clamp(14px, 3.6cqw, 38px); line-height: 1.2; }
+  .tb-links { font-size: clamp(11px, 2.3cqw, 25px); line-height: 1.5; margin-top: 1px; }
+  .tb-links a {
+    color: #1a5fb4;
+    text-decoration: underline;
+    font-weight: 600;
+    margin: 0 0.45em;
+    cursor: pointer;
+    pointer-events: auto;          /* the links themselves can be clicked */
+  }
+  .tb-links a:hover { color: #0b3d80; }
+  .tb-link { display: inline-block; }
+  .tb-hint { font-size: clamp(10px, 1.6cqw, 17px); line-height: 1.4; color: #4a4a3c; }
+
+  /* "Mazzano Romano" link on the same line as Celebration / Culture / Cuisine.
+     Its position across the map is "mazzanoLink.at" in Title_block.js. */
+  .tb-mazzano {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+    font-family: "Trebuchet MS", "Segoe UI", Arial, sans-serif;
+    font-size: clamp(11px, 2.3cqw, 25px);
+    line-height: 1.5;
+    text-shadow: 0 0 3px #fff, 0 0 3px #fff, 0 0 5px #fff, 1px 1px 2px #fff, -1px -1px 2px #fff, 1px -1px 2px #fff, -1px 1px 2px #fff;
+    pointer-events: none;
+  }
+  .tb-mazzano a { color: #1a5fb4; text-decoration: underline; font-weight: 600; cursor: pointer; pointer-events: auto; }
+  .tb-mazzano a:hover { color: #0b3d80; }
+
+  /* Movable text blocks (baseBlurb on the base map, layerBlurb on the Mazzano picture).
+     Position, width and wording are set in Title_block.js. Edit the clamp() numbers to
+     change the text size: smallest (phones), % of the picture's width, largest. */
+  .blurb {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #2b2b1b;
+    font-family: "Trebuchet MS", "Segoe UI", Arial, sans-serif;
+    font-style: italic;
+    font-size: clamp(10px, 1.9cqw, 21px);
+    line-height: 1.35;
+    white-space: pre-line;
+    text-shadow: 0 0 3px #fff, 0 0 3px #fff, 0 0 5px #fff, 1px 1px 2px #fff, -1px -1px 2px #fff, 1px -1px 2px #fff, -1px 1px 2px #fff;
+  }
+  .blurb a { color: #1a5fb4; pointer-events: auto; }
+  /* The text block on the Mazzano picture: same plain, easy-to-read lettering as the West / East labels
+     (the "Mazzano Romano" heading keeps its own font, set in Title_block.js). To go back to italic,
+     change font-style to italic and font-weight to 400. */
+  .layer .blurb { font-style: normal; font-weight: 600; text-shadow: none; color: #006400; }   /* color: the very dark green - change the code to try another */
+
+  /* Small floating labels on the Mazzano picture ("West towards Bracciano" etc.), set by layerLabels
+     in Title_block.js. background:rgba(255,255,255,0.7) - the last number is how SOLID the white is
+     (1 = solid, 0.7 = 70%). Edit the clamp() numbers to change the text size. */
+  .layer-label {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    padding: 0.35em 0.7em;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.70);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    color: #2b2b1b;
+    font-family: "Trebuchet MS", "Segoe UI", Arial, sans-serif;
+    font-weight: 600;
+    font-size: clamp(9px, 1.7cqw, 19px);
+    line-height: 1.25;
+  }
+
+  /* Language selector: three small flags in a corner of the base map (see SHOW_LANGUAGES below).
+     To move it, change top / right (use left instead of right for the left-hand corner). */
+  .langs {
+    position: absolute;
+    top: 6px; right: 50px;
+    display: flex; gap: 6px;
+    z-index: 12;
+  }
+  .langs a {
+    display: block;
+    width: 50px; height: 30px;
+    border-radius: 3px;
+    overflow: hidden;
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.35);
+    opacity: 0.8;
+    cursor: pointer;
+  }
+  .langs a:hover { opacity: 1; }
+  .langs a.on { opacity: 1; box-shadow: 0 0 0 2px #fff, 0 0 0 4px #1a5fb4; }   /* the language being shown */
+  .langs svg { display: block; width: 100%; height: 100%; }
+  /* On a mobile phone the page gets the class "mobile" (see the little script in the <head>),
+     so the flags are smaller. Change the sizes here. */
+  .mobile .langs { top: 4px; right: 50px; gap: 4px; }
+  .mobile .langs a { width: 20px; height: 13px; border-radius: 2px; }
+  .mobile .langs a.on { box-shadow: 0 0 0 1.5px #fff, 0 0 0 3px #1a5fb4; }
+
+  /* Popup box: outer box stays put, inner part scrolls if text is long */
+  .popup {
+    position: absolute;
+    width: 640px;               /* popup width: change this to make popups wider/narrower */
+    max-width: 100%;
+    max-height: 560px;          /* taller popups scroll inside after this */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    font-size: 14px;
+    line-height: 1.5;
+    color: #2c2c2a;
+    z-index: 20;
+    --hero-h: 290px;            /* height of the picture across the top: change this to make ALL of them taller/shorter */
+  }
+  .popup .inner {
+    overflow-y: auto;
+    padding: 14px 16px;
+  }
+  /* Picture across the top of the popup */
+  .popup img.hero {
+    display: block;
+    width: calc(100% + 32px);
+    height: calc(var(--hero-h) * var(--depth, 1));   /* normal height, times the picture's own imageDepth if it has one */
+    object-fit: cover;
+    object-position: center 35%;  /* which part is kept when cropped: 0% = top, 100% = bottom */
+    margin: 0 -16px 10px;
+  }
+  /* Optional extra pictures further down the popup (image2 ... image5).
+     The picture sits on the left and its text wraps around it; once the text is longer than
+     the picture, it carries on across the full width of the popup. */
+  .popup .pair {
+    display: flow-root;         /* the box grows to hold the picture, so the next picture starts below it */
+    margin: 10px 0;
+  }
+  .popup img.pic {
+    float: left;
+    width: calc(50% - 7px);     /* extra picture: half the popup width; change 50% to resize */
+    height: auto;               /* keeps the picture's proportions */
+    border-radius: 6px;
+    margin: 0 14px 6px 0;       /* gap to the text on the right, and below the picture */
+  }
+  @media (max-width: 560px) {
+    .popup .pair .body { clear: both; }   /* narrow screens (phones): the text goes below the picture */
+  }
+  .popup h3 { margin: 0 28px 10px 0; font-size: 18px; }
+  .popup p  { margin: 0 0 8px; }
+  .popup .body { white-space: pre-line; }  /* keeps your line breaks */
+  .popup a  { color: #1a5fb4; }
+  .popup .close {
+    position: absolute;
+    top: 6px; right: 8px;
+    width: 26px; height: 26px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.85);
+    font-size: 20px; line-height: 1;
+    cursor: pointer; color: #555;
+    z-index: 2;
+  }
+  .popup .close:hover { color: #000; background: #fff; }
+
+  /* SMALL phones only (class "small", see the script in the <head>): smaller popups.
+     --hero-h     : height of the picture across the top (normal 290px)
+     h3 font-size : the popup heading (normal 18px; 14.5px = about 20% smaller)
+     line-height  : space between lines of text (normal 1.5; lower = tighter) */
+  .small .popup { --hero-h: 190px; line-height: 1.3; }
+  .small .popup h3 { font-size: 14.5px; line-height: 1.2; margin: 0 28px 6px 0; }
+  .small .popup .pair { margin: 6px 0; }
+  .small .popup p { margin: 0 0 5px; }
+
+  /* Optional guide dots showing every named place (see SHOW_GUIDES) */
+  .guide {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    text-align: center;
+    z-index: 5;
+  }
+  .guide .dot {
+    width: 9px; height: 9px;
+    margin: 0 auto;
+    border-radius: 50%;
+    background: #d6336c;
+    border: 1.5px solid #fff;
+  }
+  .guide .name {
+    margin-top: 1px;
+    font-size: 10px;
+    font-weight: 600;
+    color: #8a1c44;
+    background: rgba(255,255,255,0.75);
+    padding: 0 3px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+
+  /* Fallback pin, shown if an icon file can't be found */
+  .icon svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+  /* Second map layer: a picture that opens over the base map */
+  .layer-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(30,30,28,0.5);
+    z-index: 30;
+    cursor: pointer;
+  }
+  .layer {
+    position: absolute;
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 31;
+  }
+  .layer-img {
+    display: block;
+    width: 100%; height: 100%;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  }
+  .layer-back {
+    position: absolute;
+    top: 7px; left: 8px;       /* "Back to map" button: increase the first number to move it lower */
+    z-index: 3;
+    border: none;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.92);
+    padding: 6px 12px;
+    font-size: 13px;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  }
+  .layer-back:hover { background: #fff; }
+  .layer.missing {
+    width: 70%; height: 50%;
+    background: #eee;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .layer.missing .layer-img { display: none; }
+  .layer-missing { color: #777; font-size: 14px; }
+
+  /* Coordinate readout (shift+click the map) */
+  #readout {
+    position: fixed;
+    bottom: 10px; left: 10px;
+    background: #2c2c2a; color: #fff;
+    font-size: 12px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    display: none;
+    z-index: 50;
+  }
+</style>
+</head>
+<body>
+
+
+<div class="map" id="map">
+  <!-- Your base map. Put the file in the same folder as this HTML file. -->
+  <img class="base" id="baseImage" src="Map_around_mazzano.png" alt="Map">
+</div>
+
+<div id="readout"></div>
+
+<!-- The location blocks live in these two files, in the same folder as this one -->
+<script src="Mazzano_area.js"></script>
+<script src="Mazzano.js"></script>
+<script src="Title_block.js"></script>
+
+<script>
+/*
+  ============================================================
+  SETTINGS
+  ============================================================
+  SHOW_GUIDES : true  = draw a pink dot + name for every place in the
+                        PLACES list below, so you can check each one
+                        sits where you expect. Set to false when done.
+*/
+const SHOW_GUIDES = false;
+
+/*
+  LAYER_SCALE : size of the second picture (Mazzano) when it opens, compared with
+                the base map.
+                0.94 = fits just inside the base map (how it used to be)
+                1.00 = exactly as big as the base map
+                1.13 = 13% bigger than the base map, so it overhangs both sides (was 1.10)
+                (it is never allowed to be wider than the browser window).
+*/
+const LAYER_SCALE = 1.25;
+
+/*
+  LAYER_DROP : how far (in pixels) to move the Mazzano picture DOWN from its normal,
+               centred position. Increase it to bring the picture lower, 0 for none.
+               (Whatever the number, the picture is also moved down just enough that
+               its top edge - and the "Back to map" button - never goes above the top
+               of the page.)
+*/
+const LAYER_DROP = 10;
+
+/*
+  AREA_ICON_OPACITY : how see-through the icons on the BASE map are.
+                      1 = solid (as before), 0.7 = slightly see-through, 0.5 = half see-through.
+                      An icon becomes solid when the pointer is over it.
+                      (The icons on the Mazzano picture are not changed.)
+*/
+const AREA_ICON_OPACITY = 1;
+
+/*
+  SHOW_LANGUAGES : true  = show the three little flags (English, Italian, Finnish) in the top right
+                           corner of the base map. Clicking Italian or Finnish shows the whole site
+                           translated by Google Translate; clicking the UK flag comes back to English.
+                           They only work on the published website, not when the page is opened as a
+                           file on your computer. Set to false to hide the flags.
+  LANGUAGES      : the flags shown. Each needs a code (the Google Translate language code), a name,
+                   and a matching picture in FLAGS below. Remove a line to remove a flag.
+*/
+const SHOW_LANGUAGES = true;
+const LANGUAGES = [
+  { code: "en", name: "English" },
+  { code: "it", name: "Italiano" },
+  { code: "fi", name: "Suomi" }
+];
+
+/*
+  NO_TRANSLATE : words and names that must be left exactly as they are when the site is translated
+                 (Italian names, dishes, events and so on). Everything else in the popups is
+                 translated. If a word is wrongly translated, add it to this list - spelling and
+                 capital letters must match what is in your text. (Longer names are matched first.)
+*/
+const NO_TRANSLATE = [
+  // places
+  "Mazzano Romano", "Mazzano", "Mazzanesi", "Calcata Vecchia", "Calcata Antica", "Calcata", "Nepi", "Sutri",
+  "Viterbo", "Ronciglione", "Civita Castellana", "Civita di Bagnoregio", "Civita Bagnoregio", "Bagnoregio",
+  "Bolsena", "Anguillara Sabazia", "Anguillara", "Bracciano", "Trevignano", "Sacrofano", "Caprarola",
+  "Castel Sant'Elia", "Sant'Oreste", "Monte Soratte", "Soratte", "Bunker Soratte", "Faleria", "Falerii",
+  "Cesano", "Le Rughe", "Ostia Antica", "Firenze", "Saxa Rubra", "Rasiglia", "Vignanello", "Oriolo Romano",
+  "Morlupo", "Castelnuovo di Porto", "Capena", "Riano", "Montenero Sabino", "Fiumicino", "Monte Gelato",
+  "Narce", "Treia", "Treja", "Valle del Treja", "Parco Regionale Valle del Treja", "Terme dei Papi",
+  "Villa Farnese", "Palazzo Farnese", "Lago Vico", "Lago Bracciano", "Lago di Bracciano", "Lago di Vico",
+  "Tuscia", "Lazio", "Trastevere", "Flaminio", "Piazza del Popolo", "Piazza Umberto I", "Piazza Giovanni XXIII",
+  "Via Cassia", "Via Francigena", "Via Amerina", "Via Nepesina", "Via del Fontana", "Rocca dei Borgia",
+  "Rocca di Trevignano", "Il Borgo", "Il Patio", "Il Terrazzo", "Casa Diana", "Casa Albin", "Il Drago",
+  "Antisà", "San Nicola di Bari", "San Sebastiano", "San Pellegrino", "Santa Maria di Castelvecchio",
+  "Santa Maria Assunta", "Santa Rosa", "Montarello", "Barbacane", "Li Santi", "Borgo de Fora", "Borgo",
+  "Duomo", "Il Lavatoio Comunale", "Lavatoio Comunale", "Cascata del Picchio", "Cascate",
+  // events and words
+  "Botteghe, Arti e Mestieri di un Tempo", "Palio delle Corse a Vuoto", "Corse a Vuoto", "Palio dei Borgia",
+  "Palio della Stella", "Palio", "Offerta dei Ceri", "Ludi Borgiani", "Giostra delle Contrade", "Giostra",
+  "Carnevale", "contrade", "Contrade", "contrada", "Contrada", "Festas", "Festa", "Feste Patronali", "Feste",
+  "Sagras", "Sagra", "Cioccofest", "Vendemmiale", "L'Ottobrata", "Amleto in Salsa Piccante",
+  "Trasporto della Macchina di Santa Rosa", "Facchini di Santa Rosa", "Caffeina",
+  // food and drink
+  "Cinghiale", "cinghiale", "Pappardelle", "pappardelle", "Pappardella", "strozzapretti", "caccio e pepe",
+  "Cacio e pepe", "Cacio Fiore", "amatriciana", "funghi", "vongole", "supplì", "pizzetta", "aperitivi",
+  "Lungolago", "gelato", "tagliere", "coregone", "frutti di bosco", "cornetto", "salumi", "alimentari",
+  "Il Carciofritto", "caldarroste", "ragù", "biga", "profferli", "forre", "cavoni", "metropolitana",
+  // businesses and names
+  "Bar del Falco", "Bar Falco", "Bar Novella", "Bar Margherita", "Caffetteria Milani", "Osteria Falisca",
+  "Domus Birrae", "Pizzeria da Daniele", "Ristorante Acquarella", "Trattoria Vignanellese", "Vignò",
+  "Il Casale dei buoni sapori", "Fabiolous", "Melyfrutta", "Caseificio Ingemi", "Carrefour", "Cotral",
+  "Acqua di Nepi", "MAVNA", "BIT", "Orsini", "Odescalchi", "Del Drago", "Farnese", "Borgia"
+];
+
+// Drawings of the flags (simple pictures, so they look the same on every computer)
+const FLAGS = {
+  en: '<svg viewBox="0 0 60 30"><clipPath id="fs"><path d="M0,0 v30 h60 v-30 z"/></clipPath><clipPath id="ft"><path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/></clipPath><g clip-path="url(#fs)"><path d="M0,0 v30 h60 v-30 z" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" clip-path="url(#ft)" stroke="#C8102E" stroke-width="4"/><path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/><path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/></g></svg>',
+  it: '<svg viewBox="0 0 3 2"><rect width="1" height="2" fill="#009246"/><rect x="1" width="1" height="2" fill="#fff"/><rect x="2" width="1" height="2" fill="#ce2b37"/></svg>',
+  fi: '<svg viewBox="0 0 18 11"><rect width="18" height="11" fill="#fff"/><rect x="5" width="3" height="11" fill="#003580"/><rect y="4" width="18" height="3" fill="#003580"/></svg>'
+};
+
+/*
+  ============================================================
+  PLACES - approximate positions of every name on your map
+  ============================================================
+  Format:  "Name": [x, y]   (percent across, percent down)
+  These are the CENTRE OF EACH LABEL on Map_around_Mazzano.png,
+  worked out by eye, so expect to nudge some by a point or two.
+  Use them in a location with   place: "Nepi"   instead of x / y.
+*/
+const places = {
+  "Corchiano":          [66.7,  8.3],
+  "Fabrica di Roma":    [55.3, 11.7],
+  "Tre Croci":          [14.2, 12.8],
+  "Caprarola":          [44.9, 15.3],
+  "Vetralla":           [ 8.1, 16.3],
+  "Falerii":            [65.8, 21.9],
+  "Punta del Lago":     [30.9, 22.4],
+  "Falerii Novi":       [65.5, 25.1],
+  "Civita Castellana":  [77.7, 26.0],
+  "Ronciglione":        [39.7, 26.2],
+  "Vico Matrino":       [21.5, 30.5],
+  "Blera":              [ 3.2, 32.1],
+  "Capranica":          [31.5, 37.0],
+  "Fonte Vivola":       [46.3, 37.5],
+  "Castel Sant'Elia":   [69.3, 39.4],
+  "Marturanum":         [ 9.3, 41.7],
+  "Nepi":               [64.0, 42.2],
+  "Sant'Oreste":        [97.1, 44.9],
+  "Faleria":            [83.5, 47.3],
+  "Colle Farnese":      [58.0, 48.5],
+  "Bassano Romano":     [34.4, 48.7],
+  "Mazzano Romano":     [78.3, 49.7],
+  "Vejano":             [16.4, 50.4],
+  "Rignano Flaminio":   [90.5, 54.1],
+  "Monterosi":          [56.9, 56.4],
+  "Bagni di Vicarello": [38.1, 66.2],
+  "Magliano Romano":    [83.7, 69.0],
+  "Oriolo Romano":      [24.9, 69.2],
+  "Trevignano Romano":  [45.1, 70.4],
+  "Morlupo":            [95.1, 72.6],
+  "Manziana":           [23.0, 78.1],
+  "Lago di Bracciano":  [41.4, 80.8],
+  "Poggio Dell'ellera": [70.2, 84.1],
+  "Sacrofano":          [84.5, 86.9],
+  "Bracciano":          [32.0, 87.5],
+  "Riano":              [95.5, 88.7],
+  "Anguillara Sabazia": [50.1, 91.4],
+  "Formello":           [75.7, 94.4],
+  "Cesano":             [63.7, 95.0],
+  "Vigna di Valle":     [37.4, 96.3],
+  "Le Rughe":           [70.9, 98.8]
+};
+
+/*
+  ============================================================
+  YOUR LOCATIONS - edit this list
+  ============================================================
+  place    : (easiest) a name from the PLACES list above; the position
+             is looked up for you. OR give x and y yourself.
+  x, y     : position as a PERCENTAGE of the map's width/height
+             (0,0 = top-left). Shift+click the map to read them off;
+             they are also copied to your clipboard.
+             If both place and x/y are given, x/y wins.
+  icon     : filename of your icon (PNG or SVG, same folder as this file)
+  image    : optional picture shown across the top of the popup
+  imageDepth : optional. Makes just THIS popup's top picture deeper (or shallower) than usual.
+             1 = normal, 2.2 = 2.2 times as deep (good for a tall map), 0.5 = half as deep.
+             The popup grows taller to suit, up to the height of the browser window.
+  image2   : optional second picture, shown below the main text
+  text2    : optional text shown beside image2 (same backtick rules)
+  image3, text3 ... image5, text5 : further optional picture + text pairs, in the
+             same way (up to 5 pictures and 5 texts in all)
+  title    : popup heading
+  text     : popup body text, wrapped in `backticks` so it can run over
+             several lines. Your line breaks are kept.
+  link     : optional web address shown as a link at the bottom - leave as "" for none
+  linkText : optional wording for that link
+  LINKS INSIDE THE TEXT: in text, text2 ... text5 you can put as many links as you like,
+             anywhere in the words, by writing  [the words to show](https://the-web-address)
+             For example:  Check the [opening hours](https://example.com/hours) before you go.
+             (The web address must start with https:// or http:// and cannot contain a
+             closing bracket.)
+  layer    : optional. Instead of a popup, clicking this icon opens a
+             SECOND PICTURE over the map, with its own icons. Give it
+               layer: { image: "Mazzano.jpg", locations: [ ...blocks... ] }
+             The blocks inside use the same fields as any other block, but
+             their x / y are percentages of THAT picture. Shift+click on the
+             second picture to read its coordinates.
+  (An icon file that can't be found is replaced by a plain pink dot.)
+*/
+/*
+  The popup blocks now live in two separate files, loaded just above this script:
+    Mazzano_area.js : the icons on the base map   (list called areaLocations)
+    Mazzano.js      : the icons on the Mazzano picture (list called mazzanoLocations)
+  Edit those files to add or change locations. The only icon defined here is the
+  Mazzano one, which opens the second layer.
+*/
+function loadList(name, file) {
+  let list = null;
+  try { list = eval("typeof " + name + " !== 'undefined' ? " + name + " : null"); } catch (err) {}
+  if (!Array.isArray(list)) {
+    const note = document.createElement("div");
+    note.className = "problem";
+    note.textContent = file + " did not load, or has a typing error in it, so its icons are missing. " +
+                       "Press F12 and look at the Console for the line number.";
+    document.body.insertBefore(note, document.getElementById("map"));
+    return [];
+  }
+  return list;
+}
+
+const locations = [
+
+//MAZZANO ROMANO - opens a second map layer
+  {
+    icon: "Mazzano.svg",
+    // POSITION OF THIS ICON ON THE BASE MAP (x = % across, y = % down) - edit these two numbers
+    x: 65.2, y: 49,
+    title: "Mazzano Romano",
+    layer: {
+      image: "Mazzano map.jpg",
+      locations: loadList("mazzanoLocations", "Mazzano.js")
+    }
+  }
+//END MAZZANO ROMANO BLOCK
+
+].concat(loadList("areaLocations", "Mazzano_area.js"));
+
+const map = document.getElementById("map");
+map.style.setProperty("--area-icon-opacity", AREA_ICON_OPACITY);
+const baseImage = document.getElementById("baseImage");
+const readout = document.getElementById("readout");
+let openPopup = null;
+let openIcon = null;
+let openLayer = null;
+
+// Shown in place of any icon file that can't be found
+const FALLBACK_ICON =
+  '<svg viewBox="0 0 44 44">' +
+  '<circle cx="22" cy="22" r="18" fill="#d6336c" stroke="#fff" stroke-width="4"/>' +
+  '<circle cx="22" cy="22" r="5" fill="#fff"/></svg>';
+
+function closePopup() {
+  if (openPopup) { openPopup.remove(); openPopup = null; }
+  openIcon = null;
+}
+
+// Turns  [words](https://address)  inside popup text into a clickable link that opens in a new tab
+function linkify(t) {
+  return String(t).replace(/\[([^\]\n]+)\]\(((?:https?:\/\/|mailto:)[^\s)]+)\)/g,
+    '<a href="$2" target="_blank" rel="noopener">$1</a>');
+}
+
+// Wraps the words in NO_TRANSLATE so a translator leaves them alone (only text is touched, never tags)
+let noTranslateRe = null;
+try {
+  const esc = function (w) { return w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/['\u2019]/g, "['\u2019]"); };
+  noTranslateRe = new RegExp("( ?)(?<![\\p{L}\\p{N}])(" +
+    NO_TRANSLATE.slice().sort(function (a, b) { return b.length - a.length; }).map(esc).join("|") +
+    ")(?![\\p{L}\\p{N}])( ?)", "gu");
+} catch (err) { noTranslateRe = null; }   // very old browsers: the words are simply not protected
+function protect(html) {
+  if (!noTranslateRe) return html;
+  return String(html).split(/(<[^>]*>)/).map(function (part) {
+    return part.charAt(0) === "<" ? part : part.replace(noTranslateRe, '<span translate="no" class="notranslate">$1$2$3</span>');
+  }).join("");
+}
+
+// container = the base map, or a second layer; the popup lives inside it
+function showPopup(loc, iconEl, container) {
+  closePopup();
+  openIcon = iconEl;
+
+  const popup = document.createElement("div");
+  popup.className = "popup";
+
+  let html = '<button class="close" aria-label="Close">&times;</button>';
+  html += '<div class="inner">';
+  html += "<h3>" + protect(loc.title || "") + "</h3>";
+  if (loc.image) {
+    const depth = parseFloat(loc.imageDepth);
+    html += '<img class="hero"' + (depth > 0 && depth !== 1 ? ' style="--depth:' + depth + '"' : '') +
+            ' src="' + loc.image + '" alt="' + loc.title + '">';
+  }
+  html += '<div class="body">' + protect(linkify(loc.text)) + "</div>";
+  // Extra pictures and texts: image2/text2 up to image5/text5. Each picture floats on the left
+  // with its text wrapping around it, then running full width below it (either half may be left out).
+  for (let n = 2; n <= 5; n++) {
+    const pic = loc["image" + n];
+    const txt = loc["text" + n];
+    if (pic) {
+      html += '<div class="pair"><img class="pic" src="' + pic + '" alt="' + loc.title + '">';
+      if (txt) { html += '<div class="body">' + protect(linkify(txt.trim())) + "</div>"; }
+      html += "</div>";
+    } else if (txt) {
+      html += '<div class="body" style="margin:10px 0;">' + protect(linkify(txt.trim())) + "</div>";
+    }
+  }
+  if (loc.link) {
+    html += '<p style="margin-top:10px;"><a href="' + loc.link + '" target="_blank" rel="noopener">' +
+            (loc.linkText ? protect(loc.linkText) : loc.link) + "</a></p>";
+  }
+  html += "</div>";
+  popup.innerHTML = html;
+
+  popup.querySelector(".close").addEventListener("click", function (e) {
+    e.stopPropagation();
+    closePopup();
+  });
+  popup.addEventListener("click", function (e) { e.stopPropagation(); });
+
+  container.appendChild(popup);
+  openPopup = popup;
+
+  // Place the popup beside the icon: to the right normally, to the left for icons
+  // on the right-hand side, above for icons low on the map. It is then held inside
+  // the map's left and right edges (narrow screens and phones) and kept fully
+  // on screen vertically, however far the page has been scrolled.
+  function place() {
+    const margin = 10;
+    // a deeper top picture (imageDepth) lets the popup grow too, up to the height of the window
+    const hero = popup.querySelector("img.hero");
+    const extra = hero ? Math.max(0, hero.offsetHeight - parseFloat(getComputedStyle(popup).getPropertyValue("--hero-h"))) : 0;
+    popup.style.maxHeight = Math.min(560 + extra, window.innerHeight - 2 * margin) + "px";
+    const cw = container.clientWidth;
+    const ch = container.clientHeight;
+    const pw = popup.offsetWidth;
+    const ph = popup.offsetHeight;
+    let left = (loc.x / 100) * cw + (loc.x > 60 ? -(pw + 30) : 30);
+    if (loc.centre) left = (loc.x / 100) * cw - pw / 2;   // title-block popups: centred under the block
+    left = Math.max(0, Math.min(left, cw - pw));
+    let top = (loc.y / 100) * ch + (loc.y > 55 ? -(ph - 20) : -20);
+    if (loc.centre) top = (loc.y / 100) * ch;
+    // keep within the visible part of the window (convert window edges to map coordinates)
+    const rect = container.getBoundingClientRect();
+    const minTop = -rect.top + margin;
+    const maxTop = -rect.top + window.innerHeight - ph - margin;
+    top = Math.min(top, maxTop);
+    top = Math.max(top, minTop);
+    // ...and never outside the map itself
+    top = Math.max(0, Math.min(top, ch - ph));
+    popup.style.left = left + "px";
+    popup.style.top = top + "px";
+  }
+  place();
+  // pictures arrive after the popup is placed and change its height, so re-place when they load
+  popup.querySelectorAll("img").forEach(function (im) {
+    if (!im.complete) im.addEventListener("load", place);
+  });
+}
+
+// Builds the icons for a list of locations inside a container
+function buildIcons(list, container) {
+  list.forEach(function (loc) {
+    // Look up x / y from the PLACES list if a place name was given
+    if (loc.x === undefined && loc.place) {
+      if (places[loc.place]) {
+        loc.x = places[loc.place][0];
+        loc.y = places[loc.place][1];
+      } else {
+        console.warn("Unknown place: " + loc.place);
+        return;
+      }
+    }
+
+    const el = document.createElement("div");
+    el.className = "icon";
+    el.style.left = loc.x + "%";
+    el.style.top = loc.y + "%";
+
+    const img = document.createElement("img");
+    img.alt = loc.title || "";
+    img.addEventListener("error", function () { el.innerHTML = FALLBACK_ICON; });
+    img.src = loc.icon;
+    el.appendChild(img);
+
+    el.addEventListener("click", function (e) {
+      e.stopPropagation();
+      if (loc.layer) { showLayer(loc); return; }
+      if (openIcon === el) { closePopup(); } else { showPopup(loc, el, container); }
+    });
+
+    container.appendChild(el);
+  });
+}
+
+function closeLayer() {
+  closePopup();
+  if (openLayer) {
+    window.removeEventListener("resize", openLayer.onResize);
+    openLayer.backdrop.remove();
+    openLayer.layer.remove();
+    openLayer = null;
+  }
+}
+
+// Opens a second picture over the base map, with its own icons
+function showLayer(loc) {
+  closeLayer();
+  const cfg = loc.layer;
+
+  const backdrop = document.createElement("div");
+  backdrop.className = "layer-backdrop";
+  backdrop.addEventListener("click", function (e) { e.stopPropagation(); closeLayer(); });
+
+  const layer = document.createElement("div");
+  layer.className = "layer";
+
+  const img = document.createElement("img");
+  img.className = "layer-img";
+  img.alt = loc.title;
+  layer.appendChild(img);
+
+  const back = document.createElement("button");
+  back.className = "layer-back";
+  back.textContent = "← Back to map";
+  back.addEventListener("click", function (e) { e.stopPropagation(); closeLayer(); });
+  layer.appendChild(back);
+
+  // Fit the picture inside the map, leaving a small margin all round
+  function size() {
+    const nw = img.naturalWidth, nh = img.naturalHeight;
+    if (!nw || !nh) return;
+    let s = Math.min(LAYER_SCALE * map.clientWidth / nw, LAYER_SCALE * map.clientHeight / nh);
+    s = Math.min(s, (document.documentElement.clientWidth - 16) / nw);  // never wider than the window
+    const lw = Math.round(nw * s), lh = Math.round(nh * s);
+    layer.style.width = lw + "px";
+    layer.style.height = lh + "px";
+    // bring the picture down: LAYER_DROP, plus whatever is needed to keep its top edge on the page
+    const mapTop = map.getBoundingClientRect().top + window.pageYOffset;
+    const topEdge = mapTop + map.clientHeight / 2 - lh / 2 + LAYER_DROP;
+    layer.style.marginTop = (LAYER_DROP + Math.max(0, 8 - topEdge)) + "px";
+  }
+  img.addEventListener("load", size);
+  img.addEventListener("error", function () {
+    layer.classList.add("missing");
+    const msg = document.createElement("div");
+    msg.className = "layer-missing";
+    msg.textContent = cfg.image + " not found";
+    layer.appendChild(msg);
+  });
+
+  layer.addEventListener("click", function (e) {
+    e.stopPropagation();
+    if (e.shiftKey) { reportCoords(e, img); return; }
+    closePopup();
+  });
+
+  map.appendChild(backdrop);
+  map.appendChild(layer);
+  // the movable text block on the Mazzano picture (layerBlurb in Title_block.js)
+  const tbCfg = getTitleBlockCfg();
+  const layerBlurb = makeBlurb(tbCfg && tbCfg.layerBlurb);
+  if (layerBlurb) layer.appendChild(layerBlurb);
+  // the small floating labels on the Mazzano picture (layerLabels in Title_block.js)
+  const layerLabels = makeLabels(tbCfg && tbCfg.layerLabels);
+  if (layerLabels) layer.appendChild(layerLabels);
+  // the language flags are shown on top of the Mazzano picture too
+  if (SHOW_LANGUAGES) layer.appendChild(makeLanguageBox());
+  buildIcons(cfg.locations || [], layer);
+
+  window.addEventListener("resize", size);
+  openLayer = { backdrop: backdrop, layer: layer, onResize: size };
+  img.src = cfg.image;
+}
+
+function buildGuides() {
+  Object.keys(places).forEach(function (name) {
+    const g = document.createElement("div");
+    g.className = "guide";
+    g.style.left = places[name][0] + "%";
+    g.style.top = places[name][1] + "%";
+    g.innerHTML = '<div class="dot"></div><div class="name">' + name + "</div>";
+    map.appendChild(g);
+  });
+}
+
+// Shows (and copies) the x / y of a click, relative to a given picture
+function reportCoords(e, imgEl) {
+  const rect = imgEl.getBoundingClientRect();
+  const x = ((e.clientX - rect.left) / rect.width) * 100;
+  const y = ((e.clientY - rect.top) / rect.height) * 100;
+  const snippet = "x: " + x.toFixed(1) + ", y: " + y.toFixed(1) + ",";
+  readout.textContent = snippet;
+  readout.style.display = "block";
+  try {
+    navigator.clipboard.writeText(snippet).then(function () {
+      readout.textContent = snippet + "   (copied)";
+    }, function () {});
+  } catch (err) { /* clipboard not available: the readout still shows it */ }
+}
+
+// Click empty map = close popup. Shift+click = show (and copy) coordinates.
+map.addEventListener("click", function (e) {
+  if (e.shiftKey) { reportCoords(e, baseImage); return; }
+  closePopup();
+});
+
+// Escape closes the popup first, then the second layer
+document.addEventListener("keydown", function (e) {
+  if (e.key !== "Escape") return;
+  if (openPopup) { closePopup(); } else { closeLayer(); }
+});
+
+// The title block: "Around Mazzano Romano", three links that open popups, and a hint line.
+// Everything about it (position, wording, popup contents) is in Title_block.js
+function getTitleBlockCfg() {
+  try { return (typeof titleBlock !== "undefined") ? titleBlock : null; } catch (err) { return null; }
+}
+
+// On a phone, a block (or label) may have its own  mobile: { x, y, width }  in Title_block.js.
+// Any of the three it leaves out are taken from the normal x, y, width.
+function placed(b) {
+  const phone = document.documentElement.classList.contains("mobile");
+  const m = (phone && b.mobile && typeof b.mobile === "object") ? b.mobile : {};
+  return {
+    x: m.x !== undefined ? m.x : b.x,
+    y: m.y !== undefined ? m.y : b.y,
+    width: m.width !== undefined ? m.width : b.width
+  };
+}
+
+// A movable text block: x, y = centre (% of the picture), width = % of the picture
+function makeBlurb(b) {
+  if (!b || !b.text) return null;
+  const pos = placed(b);
+  const zone = document.createElement("div");
+  zone.className = "titlezone";
+  const d = document.createElement("div");
+  d.className = "blurb";
+  d.style.left = (pos.x === undefined ? 50 : pos.x) + "%";
+  d.style.top = (pos.y === undefined ? 90 : pos.y) + "%";
+  d.style.width = (pos.width === undefined ? 40 : pos.width) + "%";
+  d.innerHTML = protect(linkify(String(b.text).trim()));
+  zone.appendChild(d);
+  return zone;
+}
+
+// Small floating labels: each has x, y = centre (% of the picture), width (% of the picture) and text
+function makeLabels(list) {
+  if (!Array.isArray(list) || !list.length) return null;
+  const zone = document.createElement("div");
+  zone.className = "titlezone";
+  list.forEach(function (b) {
+    if (!b || !b.text) return;
+    const d = document.createElement("div");
+    d.className = "layer-label";
+    const pos = placed(b);
+    d.style.left = (pos.x === undefined ? 50 : pos.x) + "%";
+    d.style.top = (pos.y === undefined ? 50 : pos.y) + "%";
+    d.style.width = (pos.width === undefined ? 16 : pos.width) + "%";
+    d.innerHTML = protect(linkify(String(b.text).trim()));
+    zone.appendChild(d);
+  });
+  return zone;
+}
+
+function buildTitleBlock() {
+  const cfg = getTitleBlockCfg();
+  if (!cfg || typeof cfg !== "object") {
+    const note = document.createElement("div");
+    note.className = "problem";
+    note.textContent = "Title_block.js did not load, or has a typing error in it, so the title block is missing. " +
+                       "Press F12 and look at the Console for the line number.";
+    document.body.insertBefore(note, document.getElementById("map"));
+    return;
+  }
+  const zone = document.createElement("div");
+  zone.className = "titlezone";
+  const block = document.createElement("div");
+  block.className = "titleblock";
+  block.style.left = (cfg.x === undefined ? 50 : cfg.x) + "%";
+  block.style.top = (cfg.y === undefined ? 4 : cfg.y) + "%";
+
+  const t = document.createElement("div");
+  t.className = "tb-title";
+  t.innerHTML = protect(cfg.title || "");
+  block.appendChild(t);
+
+  const links = document.createElement("div");
+  links.className = "tb-links";
+  (cfg.links || []).forEach(function (lk) {
+    const a = document.createElement("a");
+    a.href = "#";
+    a.setAttribute("role", "button");
+    a.textContent = lk.label || lk.title || "";
+    a.addEventListener("click", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (openIcon === a) { closePopup(); return; }
+      // the popup opens centred just below the block
+      const loc = Object.assign({ text: "" }, lk, { x: cfg.x === undefined ? 50 : cfg.x,
+                                                   y: (cfg.y === undefined ? 4 : cfg.y) + 6, centre: true });
+      showPopup(loc, a, map);
+    });
+    const cell = document.createElement("div");   // each link in its own block, so translators keep them apart
+    cell.className = "tb-link";
+    cell.appendChild(a);
+    links.appendChild(cell);
+    links.appendChild(document.createTextNode(" "));   // a real space between the links
+  });
+  block.appendChild(links);
+
+  if (cfg.hint) {
+    const h = document.createElement("div");
+    h.className = "tb-hint";
+    h.textContent = cfg.hint;
+    block.appendChild(h);
+  }
+  zone.appendChild(block);
+
+  // "Mazzano Romano" link on the same line as the three links, further across the map.
+  // Clicking it does the same as clicking the Mazzano Romano icon.
+  const mz = cfg.mazzanoLink;
+  if (mz && mz.label) {
+    const wrap = document.createElement("div");
+    wrap.className = "tb-mazzano";
+    const a = document.createElement("a");
+    a.href = "#";
+    a.setAttribute("role", "button");
+    a.textContent = mz.label;
+    a.setAttribute("translate", "no");   // the name of the village is never translated
+    a.addEventListener("click", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      closePopup();
+      const target = locations.find(function (l) { return l.layer; });
+      if (target) showLayer(target);
+    });
+    wrap.appendChild(a);
+    zone.appendChild(wrap);
+    // line it up vertically with the three links (re-done if the map changes size)
+    const placeMz = function () {
+      const zr = zone.getBoundingClientRect();
+      const lr = links.getBoundingClientRect();
+      wrap.style.left = (mz.at === undefined ? 75 : mz.at) + "%";
+      wrap.style.top = (lr.top + lr.height / 2 - zr.top) + "px";
+    };
+    placeMz();
+    window.addEventListener("resize", placeMz);
+    window.addEventListener("load", placeMz);
+    baseImage.addEventListener("load", placeMz);
+    if (window.ResizeObserver) new ResizeObserver(placeMz).observe(zone);   // map changes size as the picture loads
+  }
+
+  map.appendChild(zone);
+
+  // the movable text block on the base map (baseBlurb in Title_block.js)
+  const baseBlurb = makeBlurb(cfg.baseBlurb);
+  if (baseBlurb) map.appendChild(baseBlurb);
+}
+
+// The flags in the corner (on the base map, and again on the Mazzano picture): each one reloads the site through Google Translate in that language
+// (the English flag goes back to the normal site). Works on the published website only.
+function makeLanguageBox() {
+  const TG = ".translate.goog";
+  const host = location.hostname;
+  const onTranslated = host.slice(-TG.length) === TG;
+  // the real address of the site, whether we are on it or on its translated copy
+  const orig = onTranslated
+    ? host.slice(0, -TG.length).replace(/--/g, "\u0000").replace(/-/g, ".").replace(/\u0000/g, "-")
+    : host;
+  const live = /^https?:$/.test(location.protocol) && host && host !== "localhost" && !/^[\d.]+$/.test(host);
+  const current = onTranslated ? (new URLSearchParams(location.search).get("_x_tr_tl") || "en") : "en";
+
+  const box = document.createElement("div");
+  box.className = "langs";
+  box.setAttribute("translate", "no");
+  LANGUAGES.forEach(function (lg) {
+    const a = document.createElement("a");
+    a.innerHTML = FLAGS[lg.code] || lg.code;
+    a.title = lg.name;
+    a.setAttribute("role", "button");
+    a.setAttribute("aria-label", lg.name);
+    if (lg.code === current) { a.className = "on"; a.setAttribute("aria-current", "true"); }
+    if (live) {
+      a.href = lg.code === "en"
+        ? "https://" + orig + location.pathname
+        : "https://" + orig.replace(/-/g, "--").replace(/\./g, "-") + TG + location.pathname +
+          "?_x_tr_sl=en&_x_tr_tl=" + lg.code + "&_x_tr_hl=en&_x_tr_pto=wapp";
+    }
+    a.addEventListener("click", function (e) {
+      e.stopPropagation();
+      if (!live || lg.code === current) {
+        e.preventDefault();
+        if (!live) {
+          readout.textContent = "The language flags only work on the published website.";
+          readout.style.display = "block";
+        }
+      }
+    });
+    box.appendChild(a);
+  });
+  return box;
+}
+
+buildIcons(locations, map);
+buildTitleBlock();
+if (SHOW_LANGUAGES) map.appendChild(makeLanguageBox());
+if (SHOW_GUIDES) buildGuides();
+</script>
+
+</body>
+</html>
