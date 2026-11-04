@@ -9,6 +9,15 @@
 // with the class "mobile" so the CSS below can use phone settings (.mobile ...).
 // (Tablets are treated as computers. To include them, add |iPad|Android to the list.)
 try { if (/Mobi|iPhone|iPod/i.test(navigator.userAgent)) document.documentElement.className += " mobile"; } catch (e) {}
+
+// Is it a SMALL phone (an iPhone 6/7/8/SE or older)? These have a physical screen whose longer side is
+// about 740 pixels or less; every phone from the iPhone X onwards is 800+. If so the page also gets the
+// class "small", so the CSS below can use .small settings. To change what counts as small, change 740.
+// (The screen size is used, not the window size, because the window changes as the browser's toolbars move.)
+try {
+  if (/Mobi|iPhone|iPod/i.test(navigator.userAgent) && Math.max(screen.width, screen.height) <= 740)
+    document.documentElement.className += " small";
+} catch (e) {}
 </script>
 <style>
   * { box-sizing: border-box; }
@@ -247,6 +256,15 @@ try { if (/Mobi|iPhone|iPod/i.test(navigator.userAgent)) document.documentElemen
     z-index: 2;
   }
   .popup .close:hover { color: #000; background: #fff; }
+
+  /* SMALL phones only (class "small", see the script in the <head>): smaller popups.
+     --hero-h     : height of the picture across the top (normal 290px)
+     h3 font-size : the popup heading (normal 18px; 14.5px = about 20% smaller)
+     line-height  : space between lines of text (normal 1.5; lower = tighter) */
+  .small .popup { --hero-h: 190px; line-height: 1.3; }
+  .small .popup h3 { font-size: 14.5px; line-height: 1.2; margin: 0 28px 6px 0; }
+  .small .popup .pair { margin: 6px 0; }
+  .small .popup p { margin: 0 0 5px; }
 
   /* Optional guide dots showing every named place (see SHOW_GUIDES) */
   .guide {
